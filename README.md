@@ -15,17 +15,14 @@ Turbo Delphi 2006 Explorer
 
 Delphi XE
 
-アーカイブ内容
---------------
-C
-* Basic : 基本的なサンプル
-
-Delphi
-* Basic : 基本的なサンプル
-* CustomBar : カスタムバーを使用したサンプル
-
-著作権等
---------
+著作権
+------
 Silk Icon Set
 
 http://www.famfamfam.com/lab/icons/silk/
+
+ライセンス
+----------
+NYSL Version 0.9982 に従います。
+
+http://www.kmonos.net/nysl/
