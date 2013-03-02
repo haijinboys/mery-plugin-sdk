@@ -1,0 +1,8 @@
+EXPORTS
+	OnCommand			@1
+	QueryStatus			@2
+	GetMenuTextID		@3
+	GetStatusMessageID	@4
+	GetIconID			@5
+	OnEvents			@6
+	PluginProc			@7

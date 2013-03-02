@@ -1,0 +1,14 @@
+#include "windows.h"
+
+#define IDS_MENU_TEXT 1
+#define IDS_STATUS_MESSAGE 2
+#define IDI_ICON 101
+
+IDI_ICON ICON "Basic_Icon.ico"
+
+STRINGTABLE
+LANGUAGE LANG_JAPANESE, 0x1
+{
+	IDS_MENU_TEXT, "基本的なサンプル"
+	IDS_STATUS_MESSAGE, "基本的なサンプル|基本的なサンプルです。"
+}
