@@ -23,6 +23,6 @@ http://www.famfamfam.com/lab/icons/silk/
 
 ライセンス
 ----------
-NYSL Version 0.9982 に従います。
+NYSL Version 0.9982
 
 http://www.kmonos.net/nysl/
