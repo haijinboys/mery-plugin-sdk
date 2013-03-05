@@ -1,7 +1,7 @@
 #include "stdafx.h"
 #include "plugins.h"
 
-#define IDS_MENUTEXT 1
+#define IDS_MENU_TEXT 1
 #define IDS_STATUSMESSAGE 2
 #define IDI_ICON 101
 
@@ -38,7 +38,7 @@ EXTERN_C BOOL WINAPI QueryStatus(HWND hwnd, LPBOOL pbChecked)
 
 EXTERN_C UINT WINAPI GetMenuTextID()
 {
-	return IDS_MENUTEXT;
+	return IDS_MENU_TEXT;
 }
 
 // -----------------------------------------------------------------------------
