@@ -140,6 +140,8 @@ const
   ME_TOOL_BAR_OPEN = ME_FIRST + 45;
   ME_TOOL_BAR_CLOSE = ME_FIRST + 46;
   ME_TOOL_BAR_SHOW = ME_FIRST + 47;
+  ME_OUTPUT_STRING = ME_FIRST + 48;
+  ME_GET_OUTPUT_STRING = ME_FIRST + 49;
   ME_LAST = ME_FIRST + 255;
 
   MI_GET_FILE_NAME = 256;
@@ -160,6 +162,17 @@ const
   MI_GET_FONT_SIZE = 271;
   MI_GET_TEXT_COLOR = 272;
   MI_GET_BACK_COLOR = 273;
+  MI_GET_INVERT_COLOR = 274;
+
+  OVERWRITE_PER_PROP = 0;
+  OVERWRITE_INSERT = 1;
+  OVERWRITE_OVERWRITE = 2;
+  OVERWRITE_MASK = 3;
+
+  FLAG_OPEN_OUTPUT = 1;
+  FLAG_CLOSE_OUTPUT = 2;
+  FLAG_FOCUS_OUTPUT = 4;
+  FLAG_CLEAR_OUTPUT = 8;
 
   POS_VIEW = 0;
   POS_LOGICAL = 1;
@@ -188,6 +201,10 @@ const
   FLAG_FIND_FILENAMES_ONLY = $00000400;
   FLAG_REPLACE_BACKUP = $00000800;
   FLAG_LOGICAL = 1;
+  FLAG_WITH_CRLF = 2;
+  FLAG_GET_CRLF_BYTE = 4;
+  FLAG_CR_ONLY = 1;
+  FLAG_LF_ONLY = 2;
 
   MP_FIRST = WM_USER + $0500;
   MP_QUERY_PROPERTIES = MP_FIRST + 0;
@@ -197,156 +214,158 @@ const
   MP_PRE_TRANSLATE_MSG = MP_FIRST + 4;
   MP_LAST = MP_FIRST + 50;
 
-  MEID_NEW = 4096;
-  MEID_NEW_PASTE = 4097;
-  MEID_NEW_PASTE_QUOTES = 4098;
-  MEID_OPEN = 4099;
-  MEID_FIND_IN_FILES = 4100;
-  MEID_SAVE_ALL = 4101;
-  MEID_SAVE_CLOSE_ALL = 4102;
-  MEID_CLOSE_ALL = 4103;
-  MEID_CASCADE = 4104;
-  MEID_TILE_HORZ = 4105;
-  MEID_TILE_VERT = 4106;
-  MEID_MINIMIZE_ALL = 4107;
-  MEID_CLOSE_TRAY_ICON = 4108;
-  MEID_FILE_NEW = 4109;
-  MEID_FILE_OPEN = 4110;
-  MEID_FILE_CLOSE_OPEN = 4111;
-  MEID_FILE_SAVE = 4112;
-  MEID_FILE_SAVE_AS = 4113;
-  MEID_FILE_SAVE_ALL = 4114;
-  MEID_FILE_INSERT = 4115;
-  MEID_FILE_RELOAD_AUTO_SELECT = 4116;
-  MEID_FILE_RELOAD_UTF16LE = 4117;
-  MEID_FILE_RELOAD_UTF16BE = 4118;
-  MEID_FILE_RELOAD_UTF8 = 4119;
-  MEID_FILE_RELOAD_UTF7 = 4120;
-  MEID_FILE_RELOAD_ARABIC = 4121;
-  MEID_FILE_RELOAD_BALTIC = 4122;
-  MEID_FILE_RELOAD_CENTRAL_EUROPEAN = 4123;
-  MEID_FILE_RELOAD_CHINESE_SIMPLIFIED = 4124;
-  MEID_FILE_RELOAD_CHINESE_TRADITIONAL = 4125;
-  MEID_FILE_RELOAD_CYRILLIC = 4126;
-  MEID_FILE_RELOAD_GREEK = 4127;
-  MEID_FILE_RELOAD_HEBREW = 4128;
-  MEID_FILE_RELOAD_EUC = 4129;
-  MEID_FILE_RELOAD_JIS = 4130;
-  MEID_FILE_RELOAD_SHIFTJIS = 4131;
-  MEID_FILE_RELOAD_KOREAN = 4132;
-  MEID_FILE_RELOAD_THAI = 4133;
-  MEID_FILE_RELOAD_TURKISH = 4134;
-  MEID_FILE_RELOAD_VIETNAMESE = 4135;
-  MEID_FILE_RELOAD_WESTERN_EUROPEAN = 4136;
-  MEID_FILE_LINE_ENDING_CRLF = 4137;
-  MEID_FILE_LINE_ENDING_CR = 4138;
-  MEID_FILE_LINE_ENDING_LF = 4139;
-  MEID_FILE_PRINT = 4140;
-  MEID_FILE_PRINT_PREVIEW = 4141;
-  MEID_FILE_SAVE_CLOSE = 4142;
-  MEID_FILE_CLOSE = 4143;
-  MEID_FILE_SAVE_CLOSE_ALL = 4144;
-  MEID_FILE_CLOSE_ALL = 4145;
-  MEID_EDIT_UNDO = 4146;
-  MEID_EDIT_REDO = 4147;
-  MEID_EDIT_CUT = 4148;
-  MEID_EDIT_COPY = 4149;
-  MEID_EDIT_PASTE = 4150;
-  MEID_EDIT_COPY_QUOTES = 4151;
-  MEID_EDIT_DELETE = 4152;
-  MEID_EDIT_SELECT_ALL = 4153;
-  MEID_EDIT_DATE_TIME = 4154;
-  MEID_EDIT_GO_TO_LINE = 4155;
-  MEID_EDIT_GO_TO_FILE = 4156;
-  MEID_EDIT_READ_ONLY = 4157;
-  MEID_EDIT_INSERT_NEW_LINES = 4158;
-  MEID_EDIT_REMOVE_NEW_LINES = 4159;
-  MEID_EDIT_SPLIT_LINES = 4160;
-  MEID_EDIT_JOIN_LINES = 4161;
-  MEID_EDIT_UPPER_CASE = 4162;
-  MEID_EDIT_LOWER_CASE = 4163;
-  MEID_EDIT_CAPITALIZE = 4164;
-  MEID_EDIT_HALF_WIDTH = 4165;
-  MEID_EDIT_FULL_WIDTH = 4166;
-  MEID_EDIT_TABIFY = 4167;
-  MEID_EDIT_UNTABIFY = 4168;
-  MEID_EDIT_INDENT = 4169;
-  MEID_EDIT_UNINDENT = 4170;
-  MEID_EDIT_RECONVERT = 4171;
-  MEID_EDIT_BASE64_DECODE = 4172;
-  MEID_EDIT_INSERT = 4173;
-  MEID_EDIT_TOGGLE_BOOKMARK = 4174;
-  MEID_EDIT_NEXT_BOOKMARK = 4175;
-  MEID_EDIT_PREV_BOOKMARK = 4176;
-  MEID_EDIT_CLEAR_BOOKMARK = 4177;
-  MEID_EDIT_TOGGLE_SPELL = 4178;
-  MEID_EDIT_NEXT_SPELL = 4179;
-  MEID_EDIT_PREV_SPELL = 4180;
-  MEID_SEARCH_FIND = 4181;
-  MEID_SEARCH_NEXT = 4182;
-  MEID_SEARCH_PREV = 4183;
-  MEID_SEARCH_NEXT_WORD = 4184;
-  MEID_SEARCH_PREV_WORD = 4185;
-  MEID_SEARCH_REPLACE = 4186;
-  MEID_SEARCH_ERASE_FIND_HIGHLIGHT = 4187;
-  MEID_SEARCH_FIND_IN_FILES = 4188;
-  MEID_SEARCH_REPLACE_IN_FILES = 4189;
-  MEID_SEARCH_GOOGLE = 4190;
-  MEID_SEARCH_WIKIPEDIA = 4191;
-  MEID_VIEW_MODE_CUSTOMIZE = 4192;
-  MEID_VIEW_INVERT_COLOR = 4193;
-  MEID_VIEW_WRAP_NONE = 4194;
-  MEID_VIEW_WRAP_BY_CHAR = 4195;
-  MEID_VIEW_WRAP_BY_WINDOW = 4196;
-  MEID_VIEW_SHOW_LINE_NUMBERS = 4197;
-  MEID_VIEW_SHOW_RULER = 4198;
-  MEID_VIEW_SHOW_CRLF = 4199;
-  MEID_VIEW_SHOW_WRAP = 4200;
-  MEID_VIEW_SHOW_EOF = 4201;
-  MEID_VIEW_SHOW_TABS = 4202;
-  MEID_VIEW_SHOW_SB_SPACES = 4203;
-  MEID_VIEW_SHOW_DB_SPACES = 4204;
-  MEID_VIEW_CRLF_DIFFERENT = 4205;
-  MEID_VIEW_STANDARD_BAR = 4206;
-  MEID_VIEW_MACROS_BAR = 4207;
-  MEID_VIEW_PLUGINS_BAR = 4208;
-  MEID_VIEW_TOOLS_BAR = 4209;
-  MEID_VIEW_TOOL_BAR_TITLES = 4210;
-  MEID_VIEW_LOCK_TOOL_BARS = 4211;
-  MEID_VIEW_TOOL_BAR_CUSTOMIZE = 4212;
-  MEID_VIEW_STATUS_BAR = 4213;
-  MEID_VIEW_INC_FONT_SIZE = 4214;
-  MEID_VIEW_DEC_FONT_SIZE = 4215;
-  MEID_VIEW_FONT_CUSTOMIZE = 4216;
-  MEID_MACROS_RECORD = 4217;
-  MEID_MACROS_RUN = 4218;
-  MEID_MACROS_SAVE = 4219;
-  MEID_MACROS_EDIT = 4220;
-  MEID_MACROS_SELECT = 4221;
-  MEID_MACROS_SELECT_THIS = 4222;
-  MEID_MACROS_CUSTOMIZE = 4223;
-  MEID_TOOLS_OPTIONS = 4224;
-  MEID_TOOLS_COMPLETION = 4225;
-  MEID_TOOLS_SQL_FORMAT = 4226;
-  MEID_TOOLS_XML_FORMAT = 4227;
-  MEID_TOOLS_PLUGIN_CUSTOMIZE = 4228;
-  MEID_TOOLS_TOOL_CUSTOMIZE = 4229;
-  MEID_TOOLS_POPUP_MENU_CUSTOMIZE = 4230;
-  MEID_WINDOW_ALWAYS_TOP = 4231;
-  MEID_WINDOW_SPLIT = 4232;
-  MEID_WINDOW_NEXT_PANE = 4233;
-  MEID_WINDOW_PREV_PANE = 4234;
-  MEID_WINDOW_ACTIVE_PANE = 4235;
-  MEID_WINDOW_COMBINE = 4236;
-  MEID_WINDOW_CASCADE = 4237;
-  MEID_WINDOW_TILE_HORZ = 4238;
-  MEID_WINDOW_TILE_VERT = 4239;
-  MEID_WINDOW_MINIMIZE_ALL = 4240;
-  MEID_WINDOW_NEXT = 4241;
-  MEID_WINDOW_PREV = 4242;
-  MEID_HELP_ONLINE = 4243;
-  MEID_HELP_KEYBOARD_MAP = 4244;
-  MEID_HELP_ABOUT = 4245;
+  MEID_NEW = 2048;
+  MEID_NEW_PASTE = 2049;
+  MEID_NEW_PASTE_QUOTES = 2050;
+  MEID_OPEN = 2051;
+  MEID_FIND_IN_FILES = 2052;
+  MEID_SAVE_ALL = 2053;
+  MEID_SAVE_CLOSE_ALL = 2054;
+  MEID_CLOSE_ALL = 2055;
+  MEID_CASCADE = 2056;
+  MEID_TILE_HORZ = 2057;
+  MEID_TILE_VERT = 2058;
+  MEID_MINIMIZE_ALL = 2059;
+  MEID_CLOSE_TRAY_ICON = 2060;
+  MEID_FILE_NEW = 2061;
+  MEID_FILE_OPEN = 2062;
+  MEID_FILE_CLOSE_OPEN = 2063;
+  MEID_FILE_SAVE = 2064;
+  MEID_FILE_SAVE_AS = 2065;
+  MEID_FILE_SAVE_ALL = 2066;
+  MEID_FILE_INSERT = 2067;
+  MEID_FILE_RELOAD_AUTO_SELECT = 2068;
+  MEID_FILE_RELOAD_UTF16LE = 2069;
+  MEID_FILE_RELOAD_UTF16BE = 2070;
+  MEID_FILE_RELOAD_UTF8 = 2071;
+  MEID_FILE_RELOAD_UTF7 = 2072;
+  MEID_FILE_RELOAD_ARABIC = 2073;
+  MEID_FILE_RELOAD_BALTIC = 2074;
+  MEID_FILE_RELOAD_CENTRAL_EUROPEAN = 2075;
+  MEID_FILE_RELOAD_CHINESE_SIMPLIFIED = 2076;
+  MEID_FILE_RELOAD_CHINESE_TRADITIONAL = 2077;
+  MEID_FILE_RELOAD_CYRILLIC = 2078;
+  MEID_FILE_RELOAD_GREEK = 2079;
+  MEID_FILE_RELOAD_HEBREW = 2080;
+  MEID_FILE_RELOAD_EUC = 2081;
+  MEID_FILE_RELOAD_JIS = 2082;
+  MEID_FILE_RELOAD_SHIFTJIS = 2083;
+  MEID_FILE_RELOAD_KOREAN = 2084;
+  MEID_FILE_RELOAD_THAI = 2085;
+  MEID_FILE_RELOAD_TURKISH = 2086;
+  MEID_FILE_RELOAD_VIETNAMESE = 2087;
+  MEID_FILE_RELOAD_WESTERN_EUROPEAN = 2088;
+  MEID_FILE_LINE_ENDING_CRLF = 2089;
+  MEID_FILE_LINE_ENDING_CR = 2090;
+  MEID_FILE_LINE_ENDING_LF = 2091;
+  MEID_FILE_PRINT = 2092;
+  MEID_FILE_PRINT_PREVIEW = 2093;
+  MEID_FILE_SAVE_CLOSE = 2094;
+  MEID_FILE_CLOSE = 2095;
+  MEID_FILE_SAVE_CLOSE_ALL = 2096;
+  MEID_FILE_CLOSE_ALL = 2097;
+  MEID_EDIT_UNDO = 2098;
+  MEID_EDIT_REDO = 2099;
+  MEID_EDIT_CUT = 2100;
+  MEID_EDIT_COPY = 2101;
+  MEID_EDIT_PASTE = 2102;
+  MEID_EDIT_COPY_QUOTES = 2103;
+  MEID_EDIT_DELETE = 2104;
+  MEID_EDIT_SELECT_ALL = 2105;
+  MEID_EDIT_DATE_TIME = 2106;
+  MEID_EDIT_GO_TO_LINE = 2107;
+  MEID_EDIT_GO_TO_FILE = 2108;
+  MEID_EDIT_READ_ONLY = 2109;
+  MEID_EDIT_INSERT_NEW_LINES = 2110;
+  MEID_EDIT_REMOVE_NEW_LINES = 2111;
+  MEID_EDIT_SPLIT_LINES = 2112;
+  MEID_EDIT_JOIN_LINES = 2113;
+  MEID_EDIT_UPPER_CASE = 2114;
+  MEID_EDIT_LOWER_CASE = 2115;
+  MEID_EDIT_CAPITALIZE = 2116;
+  MEID_EDIT_HALF_WIDTH = 2117;
+  MEID_EDIT_FULL_WIDTH = 2118;
+  MEID_EDIT_TABIFY = 2119;
+  MEID_EDIT_UNTABIFY = 2120;
+  MEID_EDIT_INDENT = 2121;
+  MEID_EDIT_UNINDENT = 2122;
+  MEID_EDIT_RECONVERT = 2123;
+  MEID_EDIT_BASE64_DECODE = 2124;
+  MEID_EDIT_INSERT = 2125;
+  MEID_EDIT_TOGGLE_BOOKMARK = 2126;
+  MEID_EDIT_NEXT_BOOKMARK = 2127;
+  MEID_EDIT_PREV_BOOKMARK = 2128;
+  MEID_EDIT_CLEAR_BOOKMARK = 2129;
+  MEID_EDIT_TOGGLE_SPELL = 2130;
+  MEID_EDIT_NEXT_SPELL = 2131;
+  MEID_EDIT_PREV_SPELL = 2132;
+  MEID_SEARCH_FIND = 2133;
+  MEID_SEARCH_NEXT = 2134;
+  MEID_SEARCH_PREV = 2135;
+  MEID_SEARCH_NEXT_WORD = 2136;
+  MEID_SEARCH_PREV_WORD = 2137;
+  MEID_SEARCH_REPLACE = 2138;
+  MEID_SEARCH_ERASE_FIND_HIGHLIGHT = 2139;
+  MEID_SEARCH_FIND_IN_FILES = 2140;
+  MEID_SEARCH_REPLACE_IN_FILES = 2141;
+  MEID_SEARCH_GOOGLE = 2142;
+  MEID_SEARCH_WIKIPEDIA = 2143;
+  MEID_VIEW_MODE_CUSTOMIZE = 2144;
+  MEID_VIEW_INVERT_COLOR = 2145;
+  MEID_VIEW_WRAP_NONE = 2146;
+  MEID_VIEW_WRAP_BY_CHAR = 2147;
+  MEID_VIEW_WRAP_BY_WINDOW = 2148;
+  MEID_VIEW_SHOW_LINE_NUMBERS = 2149;
+  MEID_VIEW_SHOW_RULER = 2150;
+  MEID_VIEW_SHOW_CRLF = 2151;
+  MEID_VIEW_SHOW_WRAP = 2152;
+  MEID_VIEW_SHOW_EOF = 2153;
+  MEID_VIEW_SHOW_TABS = 2154;
+  MEID_VIEW_SHOW_SB_SPACES = 2155;
+  MEID_VIEW_SHOW_DB_SPACES = 2156;
+  MEID_VIEW_CRLF_DIFFERENT = 2157;
+  MEID_VIEW_STANDARD_BAR = 2158;
+  MEID_VIEW_MACROS_BAR = 2159;
+  MEID_VIEW_PLUGINS_BAR = 2160;
+  MEID_VIEW_TOOLS_BAR = 2161;
+  MEID_VIEW_TOOL_BAR_TITLES = 2162;
+  MEID_VIEW_LOCK_TOOL_BARS = 2163;
+  MEID_VIEW_TOOL_BAR_CUSTOMIZE = 2164;
+  MEID_VIEW_STATUS_BAR = 2165;
+  MEID_VIEW_OUTPUT_BAR = 2166;
+  MEID_VIEW_INC_FONT_SIZE = 2167;
+  MEID_VIEW_DEC_FONT_SIZE = 2168;
+  MEID_VIEW_FONT_CUSTOMIZE = 2169;
+  MEID_MACROS_RECORD = 2170;
+  MEID_MACROS_RUN = 2171;
+  MEID_MACROS_SAVE = 2172;
+  MEID_MACROS_EDIT = 2173;
+  MEID_MACROS_SELECT = 2174;
+  MEID_MACROS_SELECT_THIS = 2175;
+  MEID_MACROS_CUSTOMIZE = 2176;
+  MEID_TOOLS_OPTIONS = 2177;
+  MEID_TOOLS_COMPLETION = 2178;
+  MEID_TOOLS_SQL_FORMAT = 2179;
+  MEID_TOOLS_XML_FORMAT = 2180;
+  MEID_TOOLS_PLUGIN_CUSTOMIZE = 2181;
+  MEID_TOOLS_TOOL_CUSTOMIZE = 2182;
+  MEID_TOOLS_TERMINATE_TOOL = 2183;
+  MEID_TOOLS_POPUP_MENU_CUSTOMIZE = 2184;
+  MEID_WINDOW_ALWAYS_TOP = 2185;
+  MEID_WINDOW_SPLIT = 2186;
+  MEID_WINDOW_NEXT_PANE = 2187;
+  MEID_WINDOW_PREV_PANE = 2188;
+  MEID_WINDOW_ACTIVE_PANE = 2189;
+  MEID_WINDOW_COMBINE = 2190;
+  MEID_WINDOW_CASCADE = 2191;
+  MEID_WINDOW_TILE_HORZ = 2192;
+  MEID_WINDOW_TILE_VERT = 2193;
+  MEID_WINDOW_MINIMIZE_ALL = 2194;
+  MEID_WINDOW_NEXT = 2195;
+  MEID_WINDOW_PREV = 2196;
+  MEID_HELP_ONLINE = 2197;
+  MEID_HELP_KEYBOARD_MAP = 2198;
+  MEID_HELP_ABOUT = 2199;
 
   MEID_MY_DICTS = 4096;
   MEID_MY_MODES = 5120;
@@ -359,6 +378,7 @@ type
     cch: NativeUInt;
     flags: NativeUInt;
     yLine: NativeUInt;
+    byteCrLf: Byte;
   end;
 
   PGetLineInfo = ^TGetLineInfo;
@@ -427,6 +447,7 @@ function Editor_GetCmdID(hwnd: THandle; hInstance: THandle): NativeUInt;
 function Editor_QueryStatus(hwnd: THandle; nCmdID: NativeUInt; pbChecked: PBoolean): Boolean;
 function Editor_GetSelText(hwnd: THandle; nBufferSize: NativeUInt; szBuffer: PChar): NativeUInt;
 function Editor_GetLines(hwnd: THandle; nLogical: NativeInt): NativeUInt;
+function Editor_DocGetLines(hwnd: THandle; iDoc: NativeInt; nLogical: NativeInt): NativeUInt;
 function Editor_GetLine(hwnd: THandle; PGetLineInfo: PGetLineInfo; szString: PChar): NativeUInt;
 procedure Editor_GetCaretPos(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint);
 procedure Editor_GetScrollPos(hwnd: THandle; pptPos: PPoint);
@@ -435,7 +456,8 @@ function Editor_LineIndex(hwnd: THandle; bLogical: Boolean; yLine: NativeUInt): 
 function Editor_LoadFile(hwnd: THandle; bAllowNewWindow: Boolean; szFileName: PChar): Boolean;
 function Editor_LogicalToSerial(hwnd: THandle; pptLogical: PPoint): NativeUInt;
 procedure Editor_LogicalToView(hwnd: THandle; pptLogical, pptView: PPoint);
-function Editor_SaveFile(hwnd: THandle; bReplace: Boolean; szFileName: PChar): Boolean;
+function Editor_SaveFile(hwnd: THandle; szFileName: PChar): Boolean;
+function Editor_DocSaveFile(hwnd: THandle; iDoc: NativeInt; szFileName: PChar): Boolean;
 procedure Editor_SerialToLogical(hwnd: THandle; nSerial: NativeUInt; pptLogical: PPoint);
 procedure Editor_SetCaretPos(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint);
 procedure Editor_SetCaretPosEx(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint; bExtend: Boolean);
@@ -443,14 +465,19 @@ procedure Editor_SetScrollPos(hwnd: THandle; pptPos: PPoint);
 procedure Editor_ViewToLogical(hwnd: THandle; pptView, pptLogical: PPoint);
 procedure Editor_ExecCommand(hwnd: THandle; nCmdID: NativeUInt);
 function Editor_GetModified(hwnd: THandle): Boolean;
+function Editor_DocGetModified(hwnd: THandle; iDoc: NativeInt): Boolean;
 procedure Editor_SetModified(hwnd: THandle; bModified: Boolean);
 procedure Editor_GetSelStart(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint);
 procedure Editor_GetSelEnd(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint);
 procedure Editor_SetSelLength(hwnd: THandle; nLen: NativeUInt);
 procedure Editor_GetMode(hwnd: THandle; szModeName: PChar);
+procedure Editor_DocGetMode(hwnd: THandle; iDoc: NativeInt; szModeName: PChar);
 procedure Editor_SetMode(hwnd: THandle; szModeName: PChar);
+procedure Editor_DocSetMode(hwnd: THandle; iDoc: NativeInt; szModeName: PChar);
 procedure Editor_EmptyUndoBuffer(hwnd: THandle);
 procedure Editor_InsertString(hwnd: THandle; szString: PChar);
+procedure Editor_Insert(hwnd: THandle; szString: PChar);
+procedure Editor_Overwrite(hwnd: THandle; szString: PChar);
 procedure Editor_SetSelView(hwnd: THandle; pptSelStart, pptSelEnd: PPoint);
 function Editor_Find(hwnd: THandle; nFlags: NativeUInt; szFind: PChar): Boolean;
 function Editor_Replace(hwnd: THandle; nFlags: NativeUInt; szFindReplace: PChar): Boolean;
@@ -463,6 +490,7 @@ procedure Editor_Redraw(hwnd: THandle; bRedraw: Boolean);
 function Editor_GetSelType(hwnd: THandle): NativeInt;
 function Editor_IsCharHalfOrFull(hwnd: THandle; ch: Char): NativeInt;
 function Editor_Info(hwnd: THandle; nCmd: WPARAM; lParam: LPARAM): NativeInt;
+function Editor_DocInfo(hwnd: THandle; iDoc: NativeInt; nCmd: WPARAM; lParam: LPARAM): NativeInt;
 function Editor_GetStatus(hwnd: THandle; szStatus: PChar; nBufferSize: NativeUInt): NativeUInt;
 function Editor_CustomBarOpen(hwnd: THandle; PCustomBarInfo: PCustomBarInfo): NativeUInt;
 function Editor_CustomBarClose(hwnd: THandle; nCustomBarID: NativeUInt): Boolean;
@@ -472,6 +500,8 @@ function Editor_EnumMode(hwnd: THandle; pBuf: PChar; cchBuf: NativeUInt): Native
 function Editor_ToolBarOpen(hwnd: THandle; PToolBarInfo: PToolBarInfo): NativeUInt;
 function Editor_ToolBarClose(hwnd: THandle; nToolBarID: NativeUInt): Boolean;
 function Editor_ToolBarShow(hwnd: THandle; nToolBarID: NativeUInt; bVisible: Boolean): Boolean;
+function Editor_OutputString(hwnd: THandle; szString: PChar; nFlags: NativeUInt): Boolean;
+function Editor_GetOutputString(hwnd: THandle; cchBuf: NativeUInt; pBuf: PChar): NativeUInt;
 
 {$R *.RES}
 
@@ -546,6 +576,21 @@ end;
 function Editor_GetLines(hwnd: THandle; nLogical: NativeInt): NativeUInt;
 begin
   Result := SendMessage(hwnd, ME_GET_LINES, WPARAM(nLogical), 0);
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_DocGetLines
+//   指定する文書の行数を取得します
+// パラメータ
+//   hwnd:     ウィンドウのハンドル
+//   iDoc:     対象となる文書の0を基底とするインデックス
+//   nLogical: POS_VIEW(表示座標)またはPOS_LOGICAL(論理座標)
+// 戻り値
+//   文書の行数を返します
+
+function Editor_DocGetLines(hwnd: THandle; iDoc: NativeInt; nLogical: NativeInt): NativeUInt;
+begin
+  Result := SendMessage(hwnd, ME_GET_LINES, MakeWParam(nLogical, iDoc + 1), 0);
 end;
 
 // -----------------------------------------------------------------------------
@@ -671,14 +716,28 @@ end;
 //   ファイルに保存します
 // パラメータ
 //   hwnd:       ウィンドウのハンドル
-//   bReplace:   使用されません
 //   szFileName: 保存するファイル名
 // 戻り値
 //   成功するとTrueを返します
 
-function Editor_SaveFile(hwnd: THandle; bReplace: Boolean; szFileName: PChar): Boolean;
+function Editor_SaveFile(hwnd: THandle; szFileName: PChar): Boolean;
 begin
-  Result := Boolean(SendMessage(hwnd, ME_SAVE_FILE, WPARAM(bReplace), LPARAM(szFileName)));
+  Result := Boolean(SendMessage(hwnd, ME_SAVE_FILE, 0, LPARAM(szFileName)));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_DocSaveFile
+//   指定する文書をファイルに保存します
+// パラメータ
+//   hwnd:       ウィンドウのハンドル
+//   iDoc:       対象となる文書の0を基底とするインデックス
+//   szFileName: 保存するファイル名
+// 戻り値
+//   成功するとTrueを返します
+
+function Editor_DocSaveFile(hwnd: THandle; iDoc: NativeInt; szFileName: PChar): Boolean;
+begin
+  Result := Boolean(SendMessage(hwnd, ME_SAVE_FILE, MakeWParam(0, iDoc + 1), LPARAM(szFileName)));
 end;
 
 // -----------------------------------------------------------------------------
@@ -784,6 +843,20 @@ begin
 end;
 
 // -----------------------------------------------------------------------------
+// Editor_DocGetModified
+//   指定する文書が更新されているかどうかを取得します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+//   iDoc: 対象となる文書の0を基底とするインデックス
+// 戻り値
+//   更新されている場合はTrueを返します
+
+function Editor_DocGetModified(hwnd: THandle; iDoc: NativeInt): Boolean;
+begin
+  Result := Boolean(SendMessage(hwnd, ME_GET_MODIFIED, MakeWParam(0, iDoc + 1), 0));
+end;
+
+// -----------------------------------------------------------------------------
 // Editor_SetModified
 //   文書が更新されているかどうかを設定します
 // パラメータ
@@ -845,7 +918,7 @@ end;
 // Editor_GetMode
 //   編集モードを文字列で取得します
 // パラメータ
-//   hwnd:         ウィンドウのハンドル
+//   hwnd:       ウィンドウのハンドル
 //   szModeName: 名称を取得するバッファ(MAX_MODE_NAMEの文字数)
 // 戻り値
 //   使用されません
@@ -856,10 +929,25 @@ begin
 end;
 
 // -----------------------------------------------------------------------------
+// Editor_DocGetMode
+//   指定する文書の編集モードを文字列で取得します
+// パラメータ
+//   hwnd:       ウィンドウのハンドル
+//   iDoc:       対象となる文書の0を基底とするインデックス
+//   szModeName: 名称を取得するバッファ(MAX_MODE_NAMEの文字数)
+// 戻り値
+//   使用されません
+
+procedure Editor_DocGetMode(hwnd: THandle; iDoc: NativeInt; szModeName: PChar);
+begin
+  SendMessage(hwnd, ME_GET_MODE, MakeWParam(0, iDoc + 1), LPARAM(szModeName));
+end;
+
+// -----------------------------------------------------------------------------
 // Editor_SetMode
 //   編集モードを文字列で設定します
 // パラメータ
-//   hwnd:         ウィンドウのハンドル
+//   hwnd:       ウィンドウのハンドル
 //   szModeName: 編集モードの名称
 // 戻り値
 //   使用されません
@@ -867,6 +955,21 @@ end;
 procedure Editor_SetMode(hwnd: THandle; szModeName: PChar);
 begin
   SendMessage(hwnd, ME_SET_MODE, 0, LPARAM(szModeName));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_DocSetMode
+//   指定する文書の編集モードを文字列で設定します
+// パラメータ
+//   hwnd:       ウィンドウのハンドル
+//   iDoc:       対象となる文書の0を基底とするインデックス
+//   szModeName: 編集モードの名称
+// 戻り値
+//   使用されません
+
+procedure Editor_DocSetMode(hwnd: THandle; iDoc: NativeInt; szModeName: PChar);
+begin
+  SendMessage(hwnd, ME_SET_MODE, MakeWParam(0, iDoc + 1), LPARAM(szModeName));
 end;
 
 // -----------------------------------------------------------------------------
@@ -893,7 +996,35 @@ end;
 
 procedure Editor_InsertString(hwnd: THandle; szString: PChar);
 begin
-  SendMessage(hwnd, ME_INSERT_STRING, 0, LPARAM(szString));
+  SendMessage(hwnd, ME_INSERT_STRING, OVERWRITE_PER_PROP, LPARAM(szString));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_Insert
+//   カーソル位置に文字列を挿入します
+// パラメータ
+//   hwnd:     ウィンドウのハンドル
+//   szString: 挿入する文字列
+// 戻り値
+//   使用されません
+
+procedure Editor_Insert(hwnd: THandle; szString: PChar);
+begin
+  SendMessage(hwnd, ME_INSERT_STRING, OVERWRITE_INSERT, LPARAM(szString));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_Overwrite
+//   カーソル位置に文字列を上書きします
+// パラメータ
+//   hwnd:     ウィンドウのハンドル
+//   szString: 挿入する文字列
+// 戻り値
+//   使用されません
+
+procedure Editor_Overwrite(hwnd: THandle; szString: PChar);
+begin
+  SendMessage(hwnd, ME_INSERT_STRING, OVERWRITE_OVERWRITE, LPARAM(szString));
 end;
 
 // -----------------------------------------------------------------------------
@@ -1098,6 +1229,40 @@ begin
 end;
 
 // -----------------------------------------------------------------------------
+// Editor_DocInfo
+//   指定する文書の情報を取得・設定します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+//   iDoc: 0を基底とする文書のインデックス
+//   nCmd: 取得・設定する情報の種類
+// 戻り値
+//   nCmdにより異なります
+// 備考
+//   MI_GET_FILE_NAME:      開いているファイル名を取得します
+//   MI_GET_APP_VERSION:    バージョンを取得します
+//   MI_IS_WINDOW_COMBINED: タブの有効・無効を取得します
+//   MI_WINDOW_COMBINE:     タブの有効・無効を設定します
+//   MI_GET_DOC_COUNT:      開いている文書の数を取得します
+//   MI_INDEX_TO_DOC:       文書のインデックスからハンドルに変換します
+//   MI_DOC_TO_INDEX:       文書のハンドルからインデックスに変換します
+//   MI_GET_ACTIVE_INDEX:   アクティブな文書のインデックスを取得します
+//   MI_SET_ACTIVE_INDEX:   インデックスを指定して文書をアクティブにします
+//   MI_GET_ACTIVE_DOC:     アクティブな文書のハンドルを取得します
+//   MI_SET_ACTIVE_DOC:     ハンドルを指定して文書をアクティブにします
+//   MI_CLOSE_DOC:          文書を閉じます
+//   MI_SAVE_DOC:           文書を保存します
+//   MI_GET_FONT_NAME:      フォント名を取得します
+//   MI_GET_FONT_CHARSET:   フォントの文字セットを取得します
+//   MI_GET_FONT_SIZE:      フォントのサイズを取得します
+//   MI_GET_TEXT_COLOR:     文字の色を取得します
+//   MI_GET_BACK_COLOR:     背景の色を取得します
+
+function Editor_DocInfo(hwnd: THandle; iDoc: NativeInt; nCmd: WPARAM; lParam: LPARAM): NativeInt;
+begin
+  Result := SendMessage(hwnd, ME_INFO, MakeWParam(nCmd, iDoc + 1), lParam);
+end;
+
+// -----------------------------------------------------------------------------
 // Editor_GetStatus
 //   ステータスバーに表示されている文字列を取得します
 // パラメータ
@@ -1224,6 +1389,41 @@ end;
 function Editor_ToolBarShow(hwnd: THandle; nToolBarID: NativeUInt; bVisible: Boolean): Boolean;
 begin
   Result := Boolean(SendMessage(hwnd, ME_TOOL_BAR_SHOW, WPARAM(nToolBarID), LPARAM(bVisible)));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_OutputString
+//   アウトプットバーに文字列を追加します
+// パラメータ
+//   hwnd:     ウィンドウのハンドル
+//   szString: 追加する文字列
+//   nFlags:   フラグ
+// 戻り値
+//   成功するとTrueを返します
+// 備考
+//   FLAG_OPEN_OUTPUT:  アウトプットバーを開きます
+//   FLAG_CLOSE_OUTPUT: アウトプットバーを閉じます
+//   FLAG_FOCUS_OUTPUT: アウトプットバーにフォーカスを設定します
+//   FLAG_CLEAR_OUTPUT: アウトプットバの文字列をクリアします
+
+function Editor_OutputString(hwnd: THandle; szString: PChar; nFlags: NativeUInt): Boolean;
+begin
+  Result := Boolean(SendMessage(hwnd, ME_OUTPUT_STRING, WPARAM(nFlags), LPARAM(szString)));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_GetOutputString
+//   アウトプットバーの文字列を取得します
+// パラメータ
+//   hwnd:   ウィンドウのハンドル
+//   cchBuf: 終端文字を含むバッファのサイズ
+//   pBuf:   文字列を取得するバッファへのポインタ
+// 戻り値
+//   cchBufが0の場合はバッファに必要なサイズ、0以外の場合は使用されません
+
+function Editor_GetOutputString(hwnd: THandle; cchBuf: NativeUInt; pBuf: PChar): NativeUInt;
+begin
+  Result := SendMessage(hwnd, ME_GET_OUTPUT_STRING, WPARAM(cchBuf), LPARAM(pBuf));
 end;
 
 end.

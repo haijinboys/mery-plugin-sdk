@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "plugins.h"
+#include "plugin.h"
 
 #define IDS_MENU_TEXT 1
 #define IDS_STATUSMESSAGE 2
