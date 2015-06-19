@@ -87,6 +87,10 @@ const
   EVENT_TOOL_BAR_CLOSED = $00100000;
   EVENT_TOOL_BAR_SHOW = $00200000;
   EVENT_IDLE = $00400000;
+  // 2.3.0
+  EVENT_FILE_SAVING = $00800000;
+  // 2.4.0
+  EVENT_DPI_CHANGED = $01000000;
 
   CLOSED_FRAME_WINDOW = 1;
   CLOSED_ANOTHER_CUSTOM_BAR = 2;
@@ -369,6 +373,9 @@ const
   MEID_EDIT_PASTE_QUOTES = 2200;
   MEID_EDIT_COPY_LINK = 2201;
   MEID_EDIT_OPEN_LINK = 2202;
+  // 2.4.0
+  MEID_VIEW_FULL_SCREEN = 2203;
+  MEID_MACROS_RUN_OPTIONS = 2204;
 
   MEID_MY_DICTS = 4096;
   MEID_MY_MODES = 5120;
@@ -505,8 +512,6 @@ function Editor_ToolBarClose(hwnd: THandle; nToolBarID: NativeUInt): Boolean;
 function Editor_ToolBarShow(hwnd: THandle; nToolBarID: NativeUInt; bVisible: Boolean): Boolean;
 function Editor_OutputString(hwnd: THandle; szString: PChar; nFlags: NativeUInt): Boolean;
 function Editor_GetOutputString(hwnd: THandle; cchBuf: NativeUInt; pBuf: PChar): NativeUInt;
-
-{$R *.RES}
 
 implementation
 

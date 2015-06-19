@@ -4,10 +4,10 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, Menus, StdCtrls;
+  Dialogs, Menus, StdCtrls, mPerMonitorDpi;
 
 type
-  TMainForm = class(TForm)
+  TMainForm = class(TScaledForm)
     PopupMenu: TPopupMenu;
     PropMenuItem: TMenuItem;
     Memo: TMemo;
@@ -22,6 +22,7 @@ type
   public
     { Public êÈåæ }
     procedure CustomBarAll;
+    procedure SetScale(const Value: NativeInt);
     function SetProperties: Boolean;
     property BarPos: NativeInt read FBarPos write FBarPos;
     property UpdateCustomBar: Boolean read FUpdateCustomBar write FUpdateCustomBar;
@@ -71,6 +72,19 @@ end;
 procedure TMainForm.CustomBarAll;
 begin
   //
+end;
+
+// -----------------------------------------------------------------------------
+// ÉXÉPÅ[Éãê›íË
+
+procedure TMainForm.SetScale(const Value: NativeInt);
+var
+  P: NativeInt;
+begin
+  P := PixelsPerInch;
+  PixelsPerInch := Value;
+  with Font do
+    Height := MulDiv(Height, Self.PixelsPerInch, P);
 end;
 
 // -----------------------------------------------------------------------------

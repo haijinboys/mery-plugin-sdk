@@ -1,5 +1,7 @@
 library CustomBar;
 
+{$R 'mPlugin.res' 'mPlugin.rc'}
+
 uses
   Windows,
   Classes,
@@ -7,7 +9,8 @@ uses
   mProp in 'mProp.pas' {PropForm},
   mFrame in 'mFrame.pas',
   mCustomBar in 'mCustomBar.pas',
-  mPlugin in 'mPlugin.pas';
+  mPlugin in 'mPlugin.pas',
+  mPerMonitorDpi in 'mPerMonitorDpi.pas';
 
 const
   IDS_MENU_TEXT = 1;

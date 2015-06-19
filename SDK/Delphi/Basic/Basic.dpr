@@ -1,5 +1,7 @@
 library Basic;
 
+{$R 'mPlugin.res' 'mPlugin.rc'}
+
 uses
   Windows,
   mPlugin in 'mPlugin.pas';
