@@ -265,10 +265,7 @@ begin
       if (nEvent and EVENT_FILE_SAVING) <> 0 then
         Memo.Lines.Insert(0, 'EVENT_FILE_SAVING');
       if (nEvent and EVENT_DPI_CHANGED) <> 0 then
-      begin
-        SetScale(lParam);
         Memo.Lines.Insert(0, 'EVENT_DPI_CHANGED');
-      end;
     end;
 end;
 

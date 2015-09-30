@@ -9,8 +9,7 @@ uses
   mProp in 'mProp.pas' {PropForm},
   mFrame in 'mFrame.pas',
   mCustomBar in 'mCustomBar.pas',
-  mPlugin in 'mPlugin.pas',
-  mPerMonitorDpi in 'mPerMonitorDpi.pas';
+  mPlugin in 'mPlugin.pas';
 
 const
   IDS_MENU_TEXT = 1;

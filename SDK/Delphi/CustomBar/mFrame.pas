@@ -39,7 +39,7 @@ implementation
 
 function TFrameList.Get(Index: Integer): TFrame;
 begin
-  Result := TFrame( inherited Get(Index));
+  Result := TFrame(inherited Get(Index));
 end;
 
 procedure TFrameList.Put(Index: Integer; const Value: TFrame);
