@@ -4,11 +4,11 @@ interface
 
 uses
 {$IF CompilerVersion > 22.9}
-  Winapi.Windows, Winapi.Messages;
+  Winapi.Windows, Winapi.Messages,
 {$ELSE}
-  Windows, Messages;
+  Windows, Messages,
 {$IFEND}
-
+  Native;
 
 const
   MAX_MODE_NAME = 260;
@@ -57,6 +57,12 @@ const
   COLOR_OTHER = 40;
   COLOR_CONTROL = 41;
   COLOR_INVALID = 42;
+
+  // 2.5.0
+  DWRITE_GAMMA = 256;
+  DWRITE_ENHANCED_CONTRAST = 257;
+  DWRITE_CLEAR_TYPE_LEVEL = 258;
+  DWRITE_RENDERING_MODE = 259;
 
   CUSTOM_BAR_LEFT = 0;
   CUSTOM_BAR_TOP = 1;
@@ -146,6 +152,8 @@ const
   ME_TOOL_BAR_SHOW = ME_FIRST + 47;
   ME_OUTPUT_STRING = ME_FIRST + 48;
   ME_GET_OUTPUT_STRING = ME_FIRST + 49;
+  // 2.5.0
+  ME_DO_IDLE = ME_FIRST + 50;
   ME_LAST = ME_FIRST + 255;
 
   MI_GET_FILE_NAME = 256;
@@ -167,6 +175,10 @@ const
   MI_GET_TEXT_COLOR = 272;
   MI_GET_BACK_COLOR = 273;
   MI_GET_INVERT_COLOR = 274;
+  // 2.5.0
+  MI_GET_DWRITE_ENABLED = 275;
+  MI_GET_DWRITE_RENDERING_PARAMS = 276;
+  MI_GET_COLOR_FONT_ENABLED = 277;
 
   OVERWRITE_PER_PROP = 0;
   OVERWRITE_INSERT = 1;
@@ -271,8 +283,8 @@ const
   MEID_EDIT_REDO = 2099;
   MEID_EDIT_CUT = 2100;
   MEID_EDIT_COPY = 2101;
-  MEID_EDIT_PASTE = 2102;
-  MEID_EDIT_COPY_QUOTES = 2103;
+  MEID_EDIT_COPY_QUOTES = 2102;
+  MEID_EDIT_PASTE = 2103;
   MEID_EDIT_DELETE = 2104;
   MEID_EDIT_SELECT_ALL = 2105;
   MEID_EDIT_DATE_TIME = 2106;
@@ -348,14 +360,14 @@ const
   MEID_MACROS_CUSTOMIZE = 2176;
   MEID_TOOLS_OPTIONS = 2177;
   MEID_TOOLS_COMPLETION = 2178;
-  MEID_TOOLS_SQL_FORMAT = 2179;
-  MEID_TOOLS_XML_FORMAT = 2180;
+  MEID_TOOLS_HTML_FORMAT = 2179;
+  MEID_TOOLS_SQL_FORMAT = 2180;
   MEID_TOOLS_PLUGIN_CUSTOMIZE = 2181;
   MEID_TOOLS_TOOL_CUSTOMIZE = 2182;
   MEID_TOOLS_TERMINATE_TOOL = 2183;
   MEID_TOOLS_POPUP_MENU_CUSTOMIZE = 2184;
   MEID_WINDOW_ALWAYS_TOP = 2185;
-  MEID_WINDOW_SPLIT = 2186;
+  MEID_WINDOW_SPLIT_HORZ = 2186;
   MEID_WINDOW_NEXT_PANE = 2187;
   MEID_WINDOW_PREV_PANE = 2188;
   MEID_WINDOW_ACTIVE_PANE = 2189;
@@ -379,12 +391,35 @@ const
   // 2.4.1
   MEID_VIEW_RESET_FONT_SIZE = 2205;
   MEID_VIEW_SET_DEFAULT_FONT_SIZE = 2206;
+  // 2.4.3
+  MEID_EDIT_SPELL_ALL = 2207;
+  MEID_EDIT_SPELL_SINGLE_QUOTES = 2208;
+  MEID_EDIT_SPELL_DOUBLE_QUOTES = 2209;
+  MEID_EDIT_SPELL_COMMENTS = 2210;
+  MEID_EDIT_SPELL_SCRIPT = 2211;
+  MEID_EDIT_SPELL_TAGS = 2212;
+  MEID_EDIT_SPELL_HIGHLIGHT = 2213;
+  MEID_EDIT_SPELL_HYPERLINK = 2214;
+  MEID_EDIT_SPELL_OTHER = 2215;
+  // 2.4.8
+  MEID_REPLACE_IN_FILES = 2216;
+  // 2.5.0
+  MEID_EDIT_CUT_LINE = 2217;
+  MEID_EDIT_COPY_LINE = 2218;
+  MEID_EDIT_DELETE_LINE = 2219;
+  MEID_EDIT_DELETE_RIGHT_LINE = 2220;
+  MEID_EDIT_DELETE_LEFT_LINE = 2221;
+  MEID_EDIT_DELETE_WORD = 2222;
+  MEID_EDIT_DELETE_RIGHT_WORD = 2223;
+  MEID_EDIT_DELETE_LEFT_WORD = 2224;
+  MEID_TOOLS_HTML_CHECK_ERRORS = 2225;
+  MEID_WINDOW_SPLIT_VERT = 2226;
 
-  MEID_MY_DICTS = 4096;
-  MEID_MY_MODES = 5120;
-  MEID_MY_MACROS = 6144;
-  MEID_MY_PLUGINS = 7168;
-  MEID_MY_TOOLS = 8192;
+  MEID_DICTS = 4096;
+  MEID_MODES = 5120;
+  MEID_MACROS = 6144;
+  MEID_PLUGINS = 7168;
+  MEID_TOOLS = 8192;
 
 type
   TGetLineInfo = record
@@ -462,26 +497,26 @@ function Editor_GetSelText(hwnd: THandle; nBufferSize: NativeUInt; szBuffer: PCh
 function Editor_GetLines(hwnd: THandle; nLogical: NativeInt): NativeUInt;
 function Editor_DocGetLines(hwnd: THandle; iDoc: NativeInt; nLogical: NativeInt): NativeUInt;
 function Editor_GetLine(hwnd: THandle; PGetLineInfo: PGetLineInfo; szString: PChar): NativeUInt;
-procedure Editor_GetCaretPos(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint);
-procedure Editor_GetScrollPos(hwnd: THandle; pptPos: PPoint);
+procedure Editor_GetCaretPos(hwnd: THandle; nLogical: NativeInt; pptPos: PNativePoint);
+procedure Editor_GetScrollPos(hwnd: THandle; pptPos: PNativePoint);
 function Editor_LineFromChar(hwnd: THandle; nLogical: NativeInt; nSerialIndex: NativeUInt): NativeUInt;
 function Editor_LineIndex(hwnd: THandle; bLogical: Boolean; yLine: NativeUInt): NativeUInt;
 function Editor_LoadFile(hwnd: THandle; bAllowNewWindow: Boolean; szFileName: PChar): Boolean;
-function Editor_LogicalToSerial(hwnd: THandle; pptLogical: PPoint): NativeUInt;
-procedure Editor_LogicalToView(hwnd: THandle; pptLogical, pptView: PPoint);
+function Editor_LogicalToSerial(hwnd: THandle; pptLogical: PNativePoint): NativeUInt;
+procedure Editor_LogicalToView(hwnd: THandle; pptLogical, pptView: PNativePoint);
 function Editor_SaveFile(hwnd: THandle; szFileName: PChar): Boolean;
 function Editor_DocSaveFile(hwnd: THandle; iDoc: NativeInt; szFileName: PChar): Boolean;
-procedure Editor_SerialToLogical(hwnd: THandle; nSerial: NativeUInt; pptLogical: PPoint);
-procedure Editor_SetCaretPos(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint);
-procedure Editor_SetCaretPosEx(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint; bExtend: Boolean);
-procedure Editor_SetScrollPos(hwnd: THandle; pptPos: PPoint);
-procedure Editor_ViewToLogical(hwnd: THandle; pptView, pptLogical: PPoint);
+procedure Editor_SerialToLogical(hwnd: THandle; nSerial: NativeUInt; pptLogical: PNativePoint);
+procedure Editor_SetCaretPos(hwnd: THandle; nLogical: NativeInt; pptPos: PNativePoint);
+procedure Editor_SetCaretPosEx(hwnd: THandle; nLogical: NativeInt; pptPos: PNativePoint; bExtend: Boolean);
+procedure Editor_SetScrollPos(hwnd: THandle; pptPos: PNativePoint);
+procedure Editor_ViewToLogical(hwnd: THandle; pptView, pptLogical: PNativePoint);
 procedure Editor_ExecCommand(hwnd: THandle; nCmdID: NativeUInt);
 function Editor_GetModified(hwnd: THandle): Boolean;
 function Editor_DocGetModified(hwnd: THandle; iDoc: NativeInt): Boolean;
 procedure Editor_SetModified(hwnd: THandle; bModified: Boolean);
-procedure Editor_GetSelStart(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint);
-procedure Editor_GetSelEnd(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint);
+procedure Editor_GetSelStart(hwnd: THandle; nLogical: NativeInt; pptPos: PNativePoint);
+procedure Editor_GetSelEnd(hwnd: THandle; nLogical: NativeInt; pptPos: PNativePoint);
 procedure Editor_SetSelLength(hwnd: THandle; nLen: NativeUInt);
 procedure Editor_GetMode(hwnd: THandle; szModeName: PChar);
 procedure Editor_DocGetMode(hwnd: THandle; iDoc: NativeInt; szModeName: PChar);
@@ -491,7 +526,7 @@ procedure Editor_EmptyUndoBuffer(hwnd: THandle);
 procedure Editor_InsertString(hwnd: THandle; szString: PChar);
 procedure Editor_Insert(hwnd: THandle; szString: PChar);
 procedure Editor_Overwrite(hwnd: THandle; szString: PChar);
-procedure Editor_SetSelView(hwnd: THandle; pptSelStart, pptSelEnd: PPoint);
+procedure Editor_SetSelView(hwnd: THandle; pptSelStart, pptSelEnd: PNativePoint);
 function Editor_Find(hwnd: THandle; nFlags: NativeUInt; szFind: PChar): Boolean;
 function Editor_Replace(hwnd: THandle; nFlags: NativeUInt; szFindReplace: PChar): Boolean;
 procedure Editor_SetStatus(hwnd: THandle; szStatus: PChar);
@@ -515,6 +550,7 @@ function Editor_ToolBarClose(hwnd: THandle; nToolBarID: NativeUInt): Boolean;
 function Editor_ToolBarShow(hwnd: THandle; nToolBarID: NativeUInt; bVisible: Boolean): Boolean;
 function Editor_OutputString(hwnd: THandle; szString: PChar; nFlags: NativeUInt): Boolean;
 function Editor_GetOutputString(hwnd: THandle; cchBuf: NativeUInt; pBuf: PChar): NativeUInt;
+procedure Editor_DoIdle(hwnd: THandle);
 
 implementation
 
@@ -629,7 +665,7 @@ end;
 // 戻り値
 //   使用されません
 
-procedure Editor_GetCaretPos(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint);
+procedure Editor_GetCaretPos(hwnd: THandle; nLogical: NativeInt; pptPos: PNativePoint);
 begin
   SendMessage(hwnd, ME_GET_CARET_POS, WPARAM(nLogical), LPARAM(pptPos));
 end;
@@ -643,7 +679,7 @@ end;
 // 戻り値
 //   使用されません
 
-procedure Editor_GetScrollPos(hwnd: THandle; pptPos: PPoint);
+procedure Editor_GetScrollPos(hwnd: THandle; pptPos: PNativePoint);
 begin
   SendMessage(hwnd, ME_GET_SCROLL_POS, 0, LPARAM(pptPos));
 end;
@@ -702,7 +738,7 @@ end;
 // 戻り値
 //   シリアル位置を返します
 
-function Editor_LogicalToSerial(hwnd: THandle; pptLogical: PPoint): NativeUInt;
+function Editor_LogicalToSerial(hwnd: THandle; pptLogical: PNativePoint): NativeUInt;
 begin
   Result := SendMessage(hwnd, ME_LOGICAL_TO_SERIAL, 0, LPARAM(pptLogical));
 end;
@@ -717,7 +753,7 @@ end;
 // 戻り値
 //   使用されません
 
-procedure Editor_LogicalToView(hwnd: THandle; pptLogical, pptView: PPoint);
+procedure Editor_LogicalToView(hwnd: THandle; pptLogical, pptView: PNativePoint);
 begin
   SendMessage(hwnd, ME_LOGICAL_TO_VIEW, WPARAM(pptLogical), LPARAM(pptView));
 end;
@@ -761,7 +797,7 @@ end;
 // 戻り値
 //   使用されません
 
-procedure Editor_SerialToLogical(hwnd: THandle; nSerial: NativeUInt; pptLogical: PPoint);
+procedure Editor_SerialToLogical(hwnd: THandle; nSerial: NativeUInt; pptLogical: PNativePoint);
 begin
   SendMessage(hwnd, ME_SERIAL_TO_LOGICAL, WPARAM(nSerial), LPARAM(pptLogical));
 end;
@@ -776,7 +812,7 @@ end;
 // 戻り値
 //   使用されません
 
-procedure Editor_SetCaretPos(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint);
+procedure Editor_SetCaretPos(hwnd: THandle; nLogical: NativeInt; pptPos: PNativePoint);
 begin
   SendMessage(hwnd, ME_SET_CARET_POS, MakeWParam(nLogical, NativeUInt(False)), LPARAM(pptPos));
 end;
@@ -792,7 +828,7 @@ end;
 // 戻り値
 //   使用されません
 
-procedure Editor_SetCaretPosEx(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint; bExtend: Boolean);
+procedure Editor_SetCaretPosEx(hwnd: THandle; nLogical: NativeInt; pptPos: PNativePoint; bExtend: Boolean);
 begin
   SendMessage(hwnd, ME_SET_CARET_POS, MakeWParam(nLogical, NativeUInt(bExtend)), LPARAM(pptPos));
 end;
@@ -806,7 +842,7 @@ end;
 // 戻り値
 //   使用されません
 
-procedure Editor_SetScrollPos(hwnd: THandle; pptPos: PPoint);
+procedure Editor_SetScrollPos(hwnd: THandle; pptPos: PNativePoint);
 begin
   SendMessage(hwnd, ME_SET_SCROLL_POS, 0, LPARAM(pptPos));
 end;
@@ -821,7 +857,7 @@ end;
 // 戻り値
 //   使用されません
 
-procedure Editor_ViewToLogical(hwnd: THandle; pptView, pptLogical: PPoint);
+procedure Editor_ViewToLogical(hwnd: THandle; pptView, pptLogical: PNativePoint);
 begin
   SendMessage(hwnd, ME_VIEW_TO_LOGICAL, WPARAM(pptView), LPARAM(pptLogical));
 end;
@@ -891,7 +927,7 @@ end;
 // 戻り値
 //   使用されません
 
-procedure Editor_GetSelStart(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint);
+procedure Editor_GetSelStart(hwnd: THandle; nLogical: NativeInt; pptPos: PNativePoint);
 begin
   SendMessage(hwnd, ME_GET_SEL_START, WPARAM(nLogical), LPARAM(pptPos));
 end;
@@ -906,7 +942,7 @@ end;
 // 戻り値
 //   使用されません
 
-procedure Editor_GetSelEnd(hwnd: THandle; nLogical: NativeInt; pptPos: PPoint);
+procedure Editor_GetSelEnd(hwnd: THandle; nLogical: NativeInt; pptPos: PNativePoint);
 begin
   SendMessage(hwnd, ME_GET_SEL_END, WPARAM(nLogical), LPARAM(pptPos));
 end;
@@ -1048,7 +1084,7 @@ end;
 // 戻り値
 //   使用されません
 
-procedure Editor_SetSelView(hwnd: THandle; pptSelStart, pptSelEnd: PPoint);
+procedure Editor_SetSelView(hwnd: THandle; pptSelStart, pptSelEnd: PNativePoint);
 begin
   SendMessage(hwnd, ME_SET_SEL_VIEW, WPARAM(pptSelStart), LPARAM(pptSelEnd));
 end;
@@ -1435,6 +1471,19 @@ end;
 function Editor_GetOutputString(hwnd: THandle; cchBuf: NativeUInt; pBuf: PChar): NativeUInt;
 begin
   Result := SendMessage(hwnd, ME_GET_OUTPUT_STRING, WPARAM(cchBuf), LPARAM(pBuf));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_DoIdle
+//   表示更新を行います
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+// 戻り値
+//   使用されません
+
+procedure Editor_DoIdle(hwnd: THandle);
+begin
+  SendMessage(hwnd, ME_DO_IDLE, 0, 0);
 end;
 
 end.

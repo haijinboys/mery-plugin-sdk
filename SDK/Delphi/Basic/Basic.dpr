@@ -2,8 +2,9 @@ library Basic;
 
 {$R 'mPlugin.res' 'mPlugin.rc'}
 
+
 uses
-  Windows,
+  Winapi.Windows,
   mPlugin in 'mPlugin.pas';
 
 resourcestring
@@ -15,7 +16,9 @@ const
   IDS_STATUS_MESSAGE = 2;
   IDI_ICON = 101;
 
+{$IFDEF DEBUG}
 {$R *.res}
+{$ENDIF}
 
 // -----------------------------------------------------------------------------
 // OnCommand
@@ -153,5 +156,8 @@ exports
   PluginProc;
 
 begin
+{$IFDEF DEBUG}
+  ReportMemoryLeaksOnShutdown := True;
+{$ENDIF}
 
 end.

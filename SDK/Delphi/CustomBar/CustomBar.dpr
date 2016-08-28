@@ -2,9 +2,11 @@ library CustomBar;
 
 {$R 'mPlugin.res' 'mPlugin.rc'}
 
+
 uses
-  Windows,
-  Classes,
+  Winapi.Windows,
+  System.Classes,
+  System.Types,
   mMain in 'mMain.pas' {MainForm},
   mProp in 'mProp.pas' {PropForm},
   mFrame in 'mFrame.pas',
@@ -19,7 +21,9 @@ const
 var
   FList: TFrameList;
 
+{$IFDEF DEBUG}
 {$R *.res}
+{$ENDIF}
 
 // -----------------------------------------------------------------------------
 // OnCommand
@@ -222,5 +226,8 @@ exports
   PluginProc;
 
 begin
+{$IFDEF DEBUG}
+  ReportMemoryLeaksOnShutdown := True;
+{$ENDIF}
 
 end.
