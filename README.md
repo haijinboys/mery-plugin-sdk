@@ -15,6 +15,12 @@ Turbo Delphi 2006 Explorer
 
 Delphi XE
 
+Delphi XE2
+
+Delphi 10 Seattle
+
+Delphi 10.1 Berlin
+
 著作権
 ------
 Silk Icon Set
