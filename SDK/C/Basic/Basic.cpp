@@ -114,7 +114,7 @@ EXTERN_C void WINAPI OnEvents(HWND hwnd, UINT nEvent, LPARAM lParam)
 EXTERN_C LRESULT WINAPI PluginProc(HWND hwnd, UINT nMsg, WPARAM wParam, LPARAM lParam)
 {
 	wchar_t szName[] = L"基本的なサンプル";
-	wchar_t szVersion[] = L"Version 2.0.0.0";
+	wchar_t szVersion[] = L"Version 2.0.0";
 	switch(nMsg)
 	{
 	case MP_GET_NAME:

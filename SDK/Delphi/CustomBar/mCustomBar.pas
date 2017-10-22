@@ -14,8 +14,8 @@ type
   private
     { Private êÈåæ }
     FForm: TMainForm;
-    FClientID: LongWord;
-    FBarPos: NativeInt;
+    FClientID: Cardinal;
+    FBarPos: Integer;
     function QueryProperties: Boolean;
     function SetProperties: Boolean;
     function PreTranslateMessage(hwnd: HWND; var Msg: tagMSG): Boolean;
@@ -29,8 +29,8 @@ type
     procedure OnIdle;
     procedure OnCommand(hwnd: HWND); override;
     function QueryStatus(hwnd: HWND; pbChecked: PBOOL): BOOL; override;
-    procedure OnEvents(hwnd: HWND; nEvent: NativeInt; lParam: LPARAM); override;
-    function PluginProc(hwnd: HWND; nMsg: NativeInt; wParam: WPARAM; lParam: LPARAM): LRESULT; override;
+    procedure OnEvents(hwnd: HWND; nEvent: Cardinal; lParam: LPARAM); override;
+    function PluginProc(hwnd: HWND; nMsg: Cardinal; wParam: WPARAM; lParam: LPARAM): LRESULT; override;
   end;
 
 implementation
@@ -175,7 +175,7 @@ begin
   Result := True;
 end;
 
-procedure TCustomBarFrame.OnEvents(hwnd: HWND; nEvent: NativeInt; lParam: LPARAM);
+procedure TCustomBarFrame.OnEvents(hwnd: HWND; nEvent: Cardinal; lParam: LPARAM);
 var
   Info: TCustomBarCloseInfo;
 begin
@@ -269,7 +269,7 @@ begin
     end;
 end;
 
-function TCustomBarFrame.PluginProc(hwnd: HWND; nMsg: NativeInt; wParam: WPARAM; lParam: LPARAM): LRESULT;
+function TCustomBarFrame.PluginProc(hwnd: HWND; nMsg: Cardinal; wParam: WPARAM; lParam: LPARAM): LRESULT;
 begin
   Result := 0;
   case nMsg of

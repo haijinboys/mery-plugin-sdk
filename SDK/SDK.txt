@@ -1,8 +1,8 @@
---------------------------------------------------------------------------------
+﻿--------------------------------------------------------------------------------
 プラグインソフトウェア開発キット
 
 e-mail: info@haijin-boys.com
-www:    http://www.haijin-boys.com/
+www:    https://www.haijin-boys.com/
 --------------------------------------------------------------------------------
 
 ● はじめに
@@ -14,9 +14,14 @@ www:    http://www.haijin-boys.com/
 	▼ 開発環境
 
 		Microsoft Visual C++ 2008
+		Microsoft Visual C++ 2010
+		Microsoft Visual C++ 2013
 		Borland Delphi 6 Personal
 		Turbo Delphi 2006 Explorer
 		Delphi XE
+		Delphi XE2
+		Delphi 10 Seattle
+		Delphi 10.2 Tokyo Starter Edition
 
 	▼ アーカイブ内容
 
@@ -38,10 +43,15 @@ www:    http://www.haijin-boys.com/
 
 ● サポート
 
-	バグや苦情があれば電子メールや掲示板でご報告いただけると幸いです。
-	なお、本SDKの最新版はhttp://www.haijin-boys.com/で公開させていただいております。
+	本ソフトの最新版は https://www.haijin-boys.com/ で公開しております。
+	バグや苦情があれば開発者のブログのフォーラムでご報告いただけると幸いです。
+	書籍掲載のご依頼などは info@haijin-boys.com までご連絡ください。
 
 ● 更新履歴
+
+	▼ 2017/10/22 (1.0.2)
+
+		64ビット版仕様変更のためNativeInt、NativeUInt、NativePointを廃止。
 
 	▼ 2013/03/02 (1.0.1)
 

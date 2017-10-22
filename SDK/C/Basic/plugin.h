@@ -168,6 +168,8 @@
 #define MI_GET_DWRITE_ENABLED 275
 #define MI_GET_DWRITE_RENDERING_PARAMS 276
 #define MI_GET_COLOR_FONT_ENABLED 277
+// 2.5.5
+#define MI_GET_GDI_COMPATIBLE 278
 
 #define OVERWRITE_PER_PROP 0
 #define OVERWRITE_INSERT 1
@@ -403,6 +405,18 @@
 #define MEID_EDIT_DELETE_LEFT_WORD 2224
 #define MEID_TOOLS_HTML_CHECK_ERRORS 2225
 #define MEID_WINDOW_SPLIT_VERT 2226
+// 2.6.1
+#define MEID_VIEW_MARKERS_BAR 2227
+#define MEID_VIEW_SMALL_ICONS 2228
+#define MEID_VIEW_MEDIUM_ICONS 2229
+#define MEID_VIEW_LARGE_ICONS 2230
+#define MEID_VIEW_EXTRA_LARGE_ICONS 2231
+#define MEID_VIEW_ADD_REMOVE_MARKER 2232
+#define MEID_VIEW_MARKER_ENABLE_ALL 2233
+#define MEID_VIEW_MARKER_DISABLE_ALL 2234
+#define MEID_VIEW_MARKER_DELETE_ALL 2235
+#define MEID_VIEW_TOGGLE_AUTO_MARKER 2236
+#define MEID_VIEW_MARKER_CUSTOMIZE 2237
 
 #define MEID_DICTS 4096
 #define MEID_MODES 5120
@@ -412,14 +426,14 @@
 
 typedef struct _GET_LINE_INFO
 {
-	UINT_PTR cch;
+	UINT cch;
 	UINT flags;
-	UINT_PTR yLine;
+	UINT yLine;
 } GET_LINE_INFO;
 
 typedef struct _MATCH_REGEX_INFO
 {
-	size_t cbSize;
+	UINT cbSize;
 	UINT nFlags;
 	LPCWSTR pszRegex;
 	LPCWSTR pszText;
@@ -430,7 +444,7 @@ typedef struct _MATCH_REGEX_INFO
 
 typedef struct _FIND_REGEX_INFO
 {
-	size_t cbSize;
+	UINT cbSize;
 	UINT nFlags;
 	LPCWSTR pszRegex;
 	LPCWSTR pszText;
@@ -441,7 +455,7 @@ typedef struct _FIND_REGEX_INFO
 
 typedef struct _CUSTOM_BAR_INFO
 {
-	size_t cbSize;
+	UINT cbSize;
 	HWND hwndCustomBar;
 	HWND hwndClient;
 	LPCTSTR pszTitle;
@@ -455,23 +469,9 @@ typedef struct _CUSTOM_BAR_CLOSE_INFO
 	DWORD dwFlags;
 } CUSTOM_BAR_CLOSE_INFO;
 
-#if (defined(_WIN64) || defined(_W64))
-typedef struct tagPOINT_PTR
-{
-	LONG_PTR x;
-	LONG_PTR y;
-} POINT_PTR, *PPOINT_PTR;
-#else
-typedef struct tagPOINT_PTR
-{
-	LONG x;
-	LONG y;
-} POINT_PTR, *PPOINT_PTR;
-#endif
-
 typedef struct _TOOLBAR_INFO
 {
-	size_t cbSize;
+	UINT cbSize;
 	HWND hwndToolBar;
 	HWND hwndClient;
 	LPCTSTR pszTitle;
@@ -488,9 +488,9 @@ typedef struct _TOOLBAR_INFO
 // 戻り値
 //   ウィンドウのハンドル
 
-inline UINT Editor_New(HWND hwnd)
+inline HWND Editor_New(HWND hwnd)
 {
-	return (UINT)SendMessage(hwnd, ME_NEW, (WPARAM)0, (LPARAM)0);
+	return (HWND)SendMessage(hwnd, ME_NEW, (WPARAM)0, (LPARAM)0);
 }
 
 // -----------------------------------------------------------------------------
@@ -532,9 +532,9 @@ inline BOOL Editor_QueryStatus(HWND hwnd, UINT nCmdID, BOOL* pbChecked)
 // 戻り値
 //   nBufferSizeが0の場合はバッファに必要なサイズ、0以外の場合は使用されません
 
-inline UINT_PTR Editor_GetSelText(HWND hwnd, UINT_PTR nBufferSize, LPWSTR szBuffer)
+inline UINT Editor_GetSelText(HWND hwnd, UINT nBufferSize, LPWSTR szBuffer)
 {
-	return (UINT_PTR)SendMessage(hwnd, ME_GET_SEL_TEXT, (WPARAM)nBufferSize, (LPARAM)szBuffer);
+	return (UINT)SendMessage(hwnd, ME_GET_SEL_TEXT, (WPARAM)nBufferSize, (LPARAM)szBuffer);
 }
 
 // -----------------------------------------------------------------------------
@@ -546,9 +546,9 @@ inline UINT_PTR Editor_GetSelText(HWND hwnd, UINT_PTR nBufferSize, LPWSTR szBuff
 // 戻り値
 //   文書の行数を返します
 
-inline UINT_PTR Editor_GetLines(HWND hwnd, int nLogical)
+inline UINT Editor_GetLines(HWND hwnd, int nLogical)
 {
-	return (UINT_PTR)SendMessage(hwnd, ME_GET_LINES, (WPARAM)(int)(nLogical), (LPARAM)0);
+	return (UINT)SendMessage(hwnd, ME_GET_LINES, (WPARAM)(int)(nLogical), (LPARAM)0);
 }
 
 // -----------------------------------------------------------------------------
@@ -561,9 +561,9 @@ inline UINT_PTR Editor_GetLines(HWND hwnd, int nLogical)
 // 戻り値
 //   文書の行数を返します
 
-inline UINT_PTR Editor_GetDocLines(HWND hwnd, int iDoc, int nLogical)
+inline UINT Editor_GetDocLines(HWND hwnd, int iDoc, int nLogical)
 {
-	return (UINT_PTR)SendMessage(hwnd, ME_GET_LINES, MAKEWPARAM(nLogical, iDoc + 1), (LPARAM)0);
+	return (UINT)SendMessage(hwnd, ME_GET_LINES, MAKEWPARAM(nLogical, iDoc + 1), (LPARAM)0);
 }
 
 // -----------------------------------------------------------------------------
@@ -576,9 +576,9 @@ inline UINT_PTR Editor_GetDocLines(HWND hwnd, int iDoc, int nLogical)
 // 戻り値
 //   pGetLineInfo->cchが0の場合はバッファに必要なサイズ、0以外の場合は使用されません
 
-inline UINT_PTR Editor_GetLine(HWND hwnd, GET_LINE_INFO* pGetLineInfo, LPWSTR szString)
+inline UINT Editor_GetLine(HWND hwnd, GET_LINE_INFO* pGetLineInfo, LPWSTR szString)
 {
-	return (UINT_PTR)SendMessage(hwnd, ME_GET_LINE, (WPARAM)(GET_LINE_INFO*)(pGetLineInfo), (LPARAM)(LPWSTR)(szString));
+	return (UINT)SendMessage(hwnd, ME_GET_LINE, (WPARAM)(GET_LINE_INFO*)(pGetLineInfo), (LPARAM)(LPWSTR)(szString));
 }
 
 // -----------------------------------------------------------------------------
@@ -591,7 +591,7 @@ inline UINT_PTR Editor_GetLine(HWND hwnd, GET_LINE_INFO* pGetLineInfo, LPWSTR sz
 // 戻り値
 //   使用されません
 
-inline void Editor_GetCaretPos(HWND hwnd, int nLogical, POINT_PTR* pptPos)
+inline void Editor_GetCaretPos(HWND hwnd, int nLogical, POINT* pptPos)
 {
 	SendMessage(hwnd, ME_GET_CARET_POS, (WPARAM)nLogical, (LPARAM)pptPos);
 }
@@ -605,9 +605,9 @@ inline void Editor_GetCaretPos(HWND hwnd, int nLogical, POINT_PTR* pptPos)
 // 戻り値
 //   使用されません
 
-inline void Editor_GetScrollPos(HWND hwnd, POINT_PTR* pptPos)
+inline void Editor_GetScrollPos(HWND hwnd, POINT* pptPos)
 {
-	SendMessage(hwnd, ME_GET_SCROLL_POS, (WPARAM)0, (LPARAM)(POINT_PTR*)(pptPos));
+	SendMessage(hwnd, ME_GET_SCROLL_POS, (WPARAM)0, (LPARAM)(POINT*)(pptPos));
 }
 
 // -----------------------------------------------------------------------------
@@ -620,9 +620,9 @@ inline void Editor_GetScrollPos(HWND hwnd, POINT_PTR* pptPos)
 // 戻り値
 //   行番号を返します
 
-inline UINT_PTR Editor_LineFromChar(HWND hwnd, int nLogical, UINT_PTR nSerialIndex)
+inline UINT Editor_LineFromChar(HWND hwnd, int nLogical, UINT nSerialIndex)
 {
-	return (UINT_PTR)SendMessage(hwnd, ME_LINE_FROM_CHAR, (WPARAM)(int)(nLogical), (LPARAM)(UINT_PTR)(nSerialIndex));
+	return (UINT)SendMessage(hwnd, ME_LINE_FROM_CHAR, (WPARAM)(int)(nLogical), (LPARAM)(UINT)(nSerialIndex));
 }
 
 // -----------------------------------------------------------------------------
@@ -635,9 +635,9 @@ inline UINT_PTR Editor_LineFromChar(HWND hwnd, int nLogical, UINT_PTR nSerialInd
 // 戻り値
 //   シリアル位置を返します
 
-inline UINT_PTR Editor_LineIndex(HWND hwnd, BOOL bLogical, UINT_PTR yLine)
+inline UINT Editor_LineIndex(HWND hwnd, BOOL bLogical, UINT yLine)
 {
-	return (UINT_PTR)SendMessage(hwnd, ME_LINE_INDEX, (WPARAM)(BOOL)(bLogical), (LPARAM)(UINT_PTR)(yLine));
+	return (UINT)SendMessage(hwnd, ME_LINE_INDEX, (WPARAM)(BOOL)(bLogical), (LPARAM)(UINT)(yLine));
 }
 
 // -----------------------------------------------------------------------------
@@ -664,9 +664,9 @@ inline BOOL Editor_LoadFile(HWND hwnd, LPCWSTR szFileName)
 // 戻り値
 //   シリアル位置を返します
 
-inline UINT_PTR Editor_LogicalToSerial(HWND hwnd, POINT_PTR* pptLogical)
+inline UINT Editor_LogicalToSerial(HWND hwnd, POINT* pptLogical)
 {
-	return (UINT_PTR)SendMessage(hwnd, ME_LOGICAL_TO_SERIAL, (WPARAM)0, (LPARAM)(POINT_PTR*)(pptLogical));
+	return (UINT)SendMessage(hwnd, ME_LOGICAL_TO_SERIAL, (WPARAM)0, (LPARAM)(POINT*)(pptLogical));
 }
 
 // -----------------------------------------------------------------------------
@@ -679,9 +679,9 @@ inline UINT_PTR Editor_LogicalToSerial(HWND hwnd, POINT_PTR* pptLogical)
 // 戻り値
 //   使用されません
 
-inline void Editor_LogicalToView(HWND hwnd, POINT_PTR* pptLogical, POINT_PTR* pptView)
+inline void Editor_LogicalToView(HWND hwnd, POINT* pptLogical, POINT* pptView)
 {
-	SendMessage(hwnd, ME_LOGICAL_TO_VIEW, (WPARAM)(POINT_PTR*)(pptLogical), (LPARAM)(POINT_PTR*)(pptView));
+	SendMessage(hwnd, ME_LOGICAL_TO_VIEW, (WPARAM)(POINT*)(pptLogical), (LPARAM)(POINT*)(pptView));
 }
 
 // -----------------------------------------------------------------------------
@@ -723,9 +723,9 @@ inline BOOL Editor_DocSaveFile(HWND hwnd, int iDoc, LPWSTR szFileName)
 // 戻り値
 //   使用されません
 
-inline void Editor_SerialToLogical(HWND hwnd, UINT_PTR nSerial, POINT_PTR* pptLogical)
+inline void Editor_SerialToLogical(HWND hwnd, UINT nSerial, POINT* pptLogical)
 {
-	SendMessage(hwnd, ME_SERIAL_TO_LOGICAL, (WPARAM)(UINT_PTR)(nSerial), (LPARAM)(POINT_PTR*)(pptLogical));
+	SendMessage(hwnd, ME_SERIAL_TO_LOGICAL, (WPARAM)(UINT)(nSerial), (LPARAM)(POINT*)(pptLogical));
 }
 
 // -----------------------------------------------------------------------------
@@ -738,9 +738,9 @@ inline void Editor_SerialToLogical(HWND hwnd, UINT_PTR nSerial, POINT_PTR* pptLo
 // 戻り値
 //   使用されません
 
-inline void Editor_SetCaretPos(HWND hwnd, int nLogical, POINT_PTR* pptPos)
+inline void Editor_SetCaretPos(HWND hwnd, int nLogical, POINT* pptPos)
 {
-	SendMessage(hwnd, ME_SET_CARET_POS, (WPARAM)(int)(nLogical), (LPARAM)(POINT_PTR*)(pptPos));
+	SendMessage(hwnd, ME_SET_CARET_POS, (WPARAM)(int)(nLogical), (LPARAM)(POINT*)(pptPos));
 }
 
 // -----------------------------------------------------------------------------
@@ -754,9 +754,9 @@ inline void Editor_SetCaretPos(HWND hwnd, int nLogical, POINT_PTR* pptPos)
 // 戻り値
 //   使用されません
 
-inline void Editor_SetCaretPosEx(HWND hwnd, int nLogical, POINT_PTR* pptPos, BOOL bExtend)
+inline void Editor_SetCaretPosEx(HWND hwnd, int nLogical, POINT* pptPos, BOOL bExtend)
 {
-	SendMessage(hwnd, ME_SET_CARET_POS, MAKEWPARAM(nLogical, bExtend), (LPARAM)(POINT_PTR*)(pptPos));
+	SendMessage(hwnd, ME_SET_CARET_POS, MAKEWPARAM(nLogical, bExtend), (LPARAM)(POINT*)(pptPos));
 }
 
 // -----------------------------------------------------------------------------
@@ -768,9 +768,9 @@ inline void Editor_SetCaretPosEx(HWND hwnd, int nLogical, POINT_PTR* pptPos, BOO
 // 戻り値
 //   使用されません
 
-inline void Editor_SetScrollPos(HWND hwnd, POINT_PTR* pptPos)
+inline void Editor_SetScrollPos(HWND hwnd, POINT* pptPos)
 {
-	SendMessage(hwnd, ME_SET_SCROLL_POS, (WPARAM)0, (LPARAM)(POINT_PTR*)(pptPos));
+	SendMessage(hwnd, ME_SET_SCROLL_POS, (WPARAM)0, (LPARAM)(POINT*)(pptPos));
 }
 
 // -----------------------------------------------------------------------------
@@ -783,9 +783,9 @@ inline void Editor_SetScrollPos(HWND hwnd, POINT_PTR* pptPos)
 // 戻り値
 //   使用されません
 
-inline void Editor_ViewToLogical(HWND hwnd, POINT_PTR* pptView, POINT_PTR* pptLogical)
+inline void Editor_ViewToLogical(HWND hwnd, POINT* pptView, POINT* pptLogical)
 {
-	SendMessage(hwnd, ME_VIEW_TO_LOGICAL, (WPARAM)(POINT_PTR*)(pptView), (LPARAM)(POINT_PTR*)(pptLogical));
+	SendMessage(hwnd, ME_VIEW_TO_LOGICAL, (WPARAM)(POINT*)(pptView), (LPARAM)(POINT*)(pptLogical));
 }
 
 // -----------------------------------------------------------------------------
@@ -853,9 +853,9 @@ inline void Editor_SetModified(HWND hwnd, BOOL bModified)
 // 戻り値
 //   使用されません
 
-inline void Editor_GetSelStart(HWND hwnd, int nLogical, POINT_PTR* pptPos)
+inline void Editor_GetSelStart(HWND hwnd, int nLogical, POINT* pptPos)
 {
-	SendMessage(hwnd, ME_GET_SEL_START, (WPARAM)(int)(nLogical), (LPARAM)(POINT_PTR*)(pptPos));
+	SendMessage(hwnd, ME_GET_SEL_START, (WPARAM)(int)(nLogical), (LPARAM)(POINT*)(pptPos));
 }
 
 // -----------------------------------------------------------------------------
@@ -868,9 +868,9 @@ inline void Editor_GetSelStart(HWND hwnd, int nLogical, POINT_PTR* pptPos)
 // 戻り値
 //   使用されません
 
-inline void Editor_GetSelEnd(HWND hwnd, int nLogical, POINT_PTR* pptPos)
+inline void Editor_GetSelEnd(HWND hwnd, int nLogical, POINT* pptPos)
 {
-	SendMessage(hwnd, ME_GET_SEL_END, (WPARAM)(int)(nLogical), (LPARAM)(POINT_PTR*)(pptPos));
+	SendMessage(hwnd, ME_GET_SEL_END, (WPARAM)(int)(nLogical), (LPARAM)(POINT*)(pptPos));
 }
 
 // -----------------------------------------------------------------------------
@@ -882,9 +882,9 @@ inline void Editor_GetSelEnd(HWND hwnd, int nLogical, POINT_PTR* pptPos)
 // 戻り値
 //   使用されません
 
-inline void Editor_SetSelLength(HWND hwnd, UINT_PTR nLen)
+inline void Editor_SetSelLength(HWND hwnd, UINT nLen)
 {
-	(void)SendMessage(hwnd, ME_SET_SEL_LENGTH, (WPARAM)(UINT_PTR)(nLen), (LPARAM)0);
+	(void)SendMessage(hwnd, ME_SET_SEL_LENGTH, (WPARAM)(UINT)(nLen), (LPARAM)0);
 }
 
 // -----------------------------------------------------------------------------
@@ -1010,9 +1010,9 @@ inline void Editor_Overwrite(HWND hwnd, LPCWSTR szString)
 // 戻り値
 //   使用されません
 
-inline void Editor_SetSelView(HWND hwnd, POINT_PTR* pptSelStart, POINT_PTR* pptSelEnd)
+inline void Editor_SetSelView(HWND hwnd, POINT* pptSelStart, POINT* pptSelEnd)
 {
-	SendMessage(hwnd, ME_SET_SEL_VIEW, (WPARAM)(POINT_PTR*)(pptSelStart), (LPARAM)(POINT_PTR*)(pptSelEnd));
+	SendMessage(hwnd, ME_SET_SEL_VIEW, (WPARAM)(POINT*)(pptSelStart), (LPARAM)(POINT*)(pptSelEnd));
 }
 
 // -----------------------------------------------------------------------------
@@ -1098,9 +1098,9 @@ inline BOOL Editor_Convert(HWND hwnd, UINT nFlags)
 // 戻り値
 //   折り返し桁数を返します
 
-inline UINT_PTR Editor_GetMargin(HWND hwnd)
+inline UINT Editor_GetMargin(HWND hwnd)
 {
-	return (UINT_PTR)SendMessage(hwnd, ME_GET_MARGIN, (WPARAM)0, (LPARAM)0);
+	return (UINT)SendMessage(hwnd, ME_GET_MARGIN, (WPARAM)0, (LPARAM)0);
 }
 
 // -----------------------------------------------------------------------------
@@ -1245,9 +1245,9 @@ inline LRESULT Editor_DocInfo(HWND hwnd, int iDoc, WPARAM nCmd, LPARAM lParam)
 // 戻り値
 //   文字列を取得するのに必要なバッファのサイズ
 
-inline UINT_PTR Editor_GetStatus(HWND hwnd, LPCWSTR szStatus, UINT_PTR nBufSize)
+inline UINT Editor_GetStatus(HWND hwnd, LPCWSTR szStatus, UINT nBufSize)
 {
-	return (UINT_PTR)SendMessage(hwnd, ME_GET_STATUS, (WPARAM)nBufSize, (LPARAM)(LPCWSTR)(szStatus));
+	return (UINT)SendMessage(hwnd, ME_GET_STATUS, (WPARAM)nBufSize, (LPARAM)(LPCWSTR)(szStatus));
 }
 
 // -----------------------------------------------------------------------------

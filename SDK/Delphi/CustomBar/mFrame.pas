@@ -1,9 +1,22 @@
+// -----------------------------------------------------------------------------
+// プラグインフレーム
+//
+// Copyright (c) Kuro. All Rights Reserved.
+// e-mail: info@haijin-boys.com
+// www:    https://www.haijin-boys.com/
+// -----------------------------------------------------------------------------
+
 unit mFrame;
 
 interface
 
 uses
+{$IF CompilerVersion > 22.9}
+  Winapi.Windows, Winapi.Messages, System.Classes;
+{$ELSE}
   Windows, Messages, Classes;
+{$IFEND}
+
 
 type
   TFrame = class(TPersistent)
@@ -16,8 +29,8 @@ type
     { Public 宣言 }
     procedure OnCommand(hwnd: HWND); virtual; abstract;
     function QueryStatus(hwnd: HWND; pbChecked: PBOOL): BOOL; virtual; abstract;
-    procedure OnEvents(hwnd: HWND; nEvent: NativeInt; lParam: LPARAM); virtual; abstract;
-    function PluginProc(hwnd: HWND; nMsg: NativeInt; wParam: WPARAM; lParam: LPARAM): LRESULT; virtual; abstract;
+    procedure OnEvents(hwnd: HWND; nEvent: Cardinal; lParam: LPARAM); virtual; abstract;
+    function PluginProc(hwnd: HWND; nMsg: Cardinal; wParam: WPARAM; lParam: LPARAM): LRESULT; virtual; abstract;
     property Handle: THandle read FHandle write FHandle;
   end;
 
@@ -49,7 +62,7 @@ end;
 
 destructor TFrameList.Destroy;
 var
-  I: NativeInt;
+  I: Integer;
 begin
   for I := 0 to Count - 1 do
     Items[I].Free;
@@ -58,7 +71,7 @@ end;
 
 function TFrameList.Find(const H: THandle): TFrame;
 var
-  I: NativeInt;
+  I: Integer;
 begin
   Result := nil;
   for I := 0 to Count - 1 do

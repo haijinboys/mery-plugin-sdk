@@ -24,13 +24,13 @@ type
   private
     { Private êÈåæ }
     FEditor: THandle;
-    FBarPos: NativeInt;
+    FBarPos: Integer;
     FUpdateCustomBar: Boolean;
   public
     { Public êÈåæ }
     procedure CustomBarAll;
     function SetProperties: Boolean;
-    property BarPos: NativeInt read FBarPos write FBarPos;
+    property BarPos: Integer read FBarPos write FBarPos;
     property UpdateCustomBar: Boolean read FUpdateCustomBar write FUpdateCustomBar;
     property Editor: THandle read FEditor write FEditor;
   end;

@@ -25,18 +25,18 @@ var
 {$R *.res}
 {$ENDIF}
 
-// -----------------------------------------------------------------------------
-// OnCommand
-// プラグインを実行した時に呼び出されます
-// パラメータ
-//   hwnd: ウィンドウのハンドル
+  // -----------------------------------------------------------------------------
+  // OnCommand
+  // プラグインを実行した時に呼び出されます
+  // パラメータ
+  //   hwnd: ウィンドウのハンドル
 
 procedure OnCommand(hwnd: HWND); stdcall;
 var
-  Frame: TFrame;
+  LFrame: TFrame;
 begin
-  Frame := FList.Find(hwnd);
-  Frame.OnCommand(hwnd);
+  LFrame := FList.Find(hwnd);
+  LFrame.OnCommand(hwnd);
 end;
 
 // -----------------------------------------------------------------------------
@@ -50,12 +50,12 @@ end;
 
 function QueryStatus(hwnd: HWND; pbChecked: PBOOL): BOOL; stdcall;
 var
-  Frame: TFrame;
+  LFrame: TFrame;
 begin
   Result := False;
-  Frame := FList.Find(hwnd);
-  if Frame <> nil then
-    Result := Frame.QueryStatus(hwnd, pbChecked);
+  LFrame := FList.Find(hwnd);
+  if LFrame <> nil then
+    Result := LFrame.QueryStatus(hwnd, pbChecked);
 end;
 
 // -----------------------------------------------------------------------------
@@ -64,7 +64,7 @@ end;
 // 戻り値
 //   リソース識別子
 
-function GetMenuTextID: NativeInt; stdcall;
+function GetMenuTextID: Cardinal; stdcall;
 begin
   Result := IDS_MENU_TEXT;
 end;
@@ -75,7 +75,7 @@ end;
 // 戻り値
 //   リソース識別子
 
-function GetStatusMessageID: NativeInt; stdcall;
+function GetStatusMessageID: Cardinal; stdcall;
 begin
   Result := IDS_STATUS_MESSAGE;
 end;
@@ -86,7 +86,7 @@ end;
 // 戻り値
 //   リソース識別子
 
-function GetIconID: NativeInt; stdcall;
+function GetIconID: Cardinal; stdcall;
 begin
   Result := IDI_ICON;
 end;
@@ -123,10 +123,10 @@ end;
 //   EVENT_TOOL_BAR_SHOW:      ツールバーが表示された時
 //   EVENT_IDLE:               アイドル時
 
-procedure OnEvents(hwnd: HWND; nEvent: NativeInt; lParam: LPARAM); stdcall;
+procedure OnEvents(hwnd: HWND; nEvent: Cardinal; lParam: LPARAM); stdcall;
 var
-  I: NativeInt;
-  AFrame: TFrame;
+  I: Integer;
+  LFrame: TFrame;
 begin
   if (nEvent and EVENT_CREATE) <> 0 then
   begin
@@ -138,22 +138,22 @@ begin
     begin
       if (nEvent and EVENT_CREATE_FRAME) <> 0 then
       begin
-        AFrame := TCustomBarFrame.Create;
-        with AFrame do
+        LFrame := TCustomBarFrame.Create;
+        with LFrame do
         begin
           Handle := hwnd;
           OnEvents(hwnd, nEvent, lParam);
         end;
-        FList.Add(AFrame);
+        FList.Add(LFrame);
       end
       else if (nEvent and EVENT_CLOSE_FRAME) <> 0 then
       begin
-        AFrame := FList.Find(hwnd);
-        if AFrame <> nil then
-          with AFrame do
+        LFrame := FList.Find(hwnd);
+        if LFrame <> nil then
+          with LFrame do
           begin
             OnEvents(hwnd, nEvent, lParam);
-            FList.Remove(AFrame);
+            FList.Remove(LFrame);
             Free;
           end;
       end
@@ -165,9 +165,9 @@ begin
       end
       else
       begin
-        AFrame := FList.Find(hwnd);
-        if AFrame <> nil then
-          AFrame.OnEvents(hwnd, nEvent, lParam);
+        LFrame := FList.Find(hwnd);
+        if LFrame <> nil then
+          LFrame.OnEvents(hwnd, nEvent, lParam);
       end;
     end;
   end;
@@ -184,9 +184,9 @@ end;
 // 戻り値
 //   メッセージにより異なります
 
-function PluginProc(hwnd: HWND; nMsg: NativeInt; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
+function PluginProc(hwnd: HWND; nMsg: Cardinal; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 var
-  Frame: TFrame;
+  LFrame: TFrame;
 begin
   Result := 0;
   case nMsg of
@@ -204,14 +204,14 @@ begin
       end;
   else
     begin
-      Frame := FList.Find(hwnd);
-      if Frame = nil then
+      LFrame := FList.Find(hwnd);
+      if LFrame = nil then
       begin
         hwnd := GetParent(hwnd);
-        Frame := FList.Find(hwnd);
+        LFrame := FList.Find(hwnd);
       end;
-      if Frame <> nil then
-        Result := Frame.PluginProc(hwnd, nMsg, wParam, lParam);
+      if LFrame <> nil then
+        Result := LFrame.PluginProc(hwnd, nMsg, wParam, lParam);
     end;
   end;
 end;

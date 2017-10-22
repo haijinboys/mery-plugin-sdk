@@ -26,7 +26,7 @@ type
     { Public êÈåæ }
   end;
 
-function Prop(AOwner: TComponent; var APos: NativeInt): Boolean;
+function Prop(AOwner: TComponent; var APos: Integer): Boolean;
 
 var
   PropForm: TPropForm;
@@ -36,7 +36,7 @@ implementation
 {$R *.dfm}
 
 
-function Prop(AOwner: TComponent; var APos: NativeInt): Boolean;
+function Prop(AOwner: TComponent; var APos: Integer): Boolean;
 begin
   with TPropForm.Create(AOwner) do
     try

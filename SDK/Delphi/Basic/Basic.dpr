@@ -20,11 +20,11 @@ const
 {$R *.res}
 {$ENDIF}
 
-// -----------------------------------------------------------------------------
-// OnCommand
-// プラグインを実行した時に呼び出されます
-// パラメータ
-//   hwnd: ウィンドウのハンドル
+  // -----------------------------------------------------------------------------
+  // OnCommand
+  // プラグインを実行した時に呼び出されます
+  // パラメータ
+  //   hwnd: ウィンドウのハンドル
 
 procedure OnCommand(hwnd: HWND); stdcall;
 begin
@@ -52,7 +52,7 @@ end;
 // 戻り値
 //   リソース識別子
 
-function GetMenuTextID: NativeInt; stdcall;
+function GetMenuTextID: Cardinal; stdcall;
 begin
   Result := IDS_MENU_TEXT;
 end;
@@ -63,7 +63,7 @@ end;
 // 戻り値
 //   リソース識別子
 
-function GetStatusMessageID: NativeInt; stdcall;
+function GetStatusMessageID: Cardinal; stdcall;
 begin
   Result := IDS_STATUS_MESSAGE;
 end;
@@ -74,7 +74,7 @@ end;
 // 戻り値
 //   リソース識別子
 
-function GetIconID: NativeInt; stdcall;
+function GetIconID: Cardinal; stdcall;
 begin
   Result := IDI_ICON;
 end;
@@ -111,7 +111,7 @@ end;
 //   EVENT_TOOL_BAR_SHOW:      ツールバーが表示された時
 //   EVENT_IDLE:               アイドル時
 
-procedure OnEvents(hwnd: HWND; nEvent: NativeInt; lParam: LPARAM); stdcall;
+procedure OnEvents(hwnd: HWND; nEvent: Cardinal; lParam: LPARAM); stdcall;
 begin
   //
 end;
@@ -127,7 +127,7 @@ end;
 // 戻り値
 //   メッセージにより異なります
 
-function PluginProc(hwnd: HWND; nMsg: NativeInt; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
+function PluginProc(hwnd: HWND; nMsg: Cardinal; wParam: WPARAM; lParam: LPARAM): LRESULT; stdcall;
 begin
   Result := 0;
   case nMsg of
