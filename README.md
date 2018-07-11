@@ -9,6 +9,10 @@ Mery のプラグインを開発するための SDK です。
 --------
 Microsoft Visual C++ 2008
 
+Microsoft Visual C++ 2010
+
+Microsoft Visual C++ 2013
+
 Borland Delphi 6 Personal
 
 Turbo Delphi 2006 Explorer
@@ -20,6 +24,8 @@ Delphi XE2
 Delphi 10 Seattle
 
 Delphi 10.1 Berlin
+
+Delphi 10.2 Tokyo
 
 著作権
 ------
