@@ -67,6 +67,39 @@
 #define DWRITE_CLEAR_TYPE_LEVEL 258
 #define DWRITE_RENDERING_MODE 259
 
+// 2.6.10
+#define ENCODING_NONE 0
+#define ENCODING_UTF16LE 65537
+#define ENCODING_UTF16LEBOM 655371
+#define ENCODING_UTF16LENOBOM 655370
+#define ENCODING_UTF16BE 65538
+#define ENCODING_UTF16BEBOM 655381
+#define ENCODING_UTF16BENOBOM 655380
+#define ENCODING_UTF8 65001
+#define ENCODING_UTF8BOM 650011
+#define ENCODING_UTF8NOBOM 650010
+#define ENCODING_UTF7 65000
+#define ENCODING_ARABIC 1256
+#define ENCODING_BALTIC 1257
+#define ENCODING_CENTRALEUROPEAN 1250
+#define ENCODING_CHINESESIMPLIFIED 936
+#define ENCODING_CHINESETRADITIONAL 950
+#define ENCODING_CYRILLIC 1251
+#define ENCODING_GREEK 1253
+#define ENCODING_HEBREW 1255
+#define ENCODING_EUC 51932
+#define ENCODING_JIS 50222
+#define ENCODING_SHIFTJIS 932
+#define ENCODING_KOREAN 949
+#define ENCODING_THAI 874
+#define ENCODING_TURKISH 1254
+#define ENCODING_VIETNAMESE 1258
+#define ENCODING_WESTERNEUROPEAN 1252
+
+#define LINE_ENDING_CRLF 0
+#define LINE_ENDING_CR 1
+#define LINE_ENDING_LF 2
+
 #define CUSTOM_BAR_LEFT 0
 #define CUSTOM_BAR_TOP 1
 #define CUSTOM_BAR_RIGHT 2
@@ -157,6 +190,8 @@
 #define ME_GET_OUTPUT_STRING (ME_FIRST + 49)
 // 2.5.0
 #define ME_DO_IDLE (ME_FIRST + 50)
+// 2.6.10
+#define ME_GET_TEXT (ME_FIRST + 51)
 #define ME_LAST (ME_FIRST + 255)
 
 #define MI_GET_FILE_NAME 256
@@ -186,6 +221,11 @@
 #define MI_GET_GDI_COMPATIBLE 278
 // 2.6.6
 #define MI_GET_VERTICAL 279
+// 2.6.10
+#define MI_GET_ENCODE 280
+#define MI_SET_ENCODE 281
+#define MI_GET_LINE_ENDING 282
+#define MI_SET_LINE_ENDING 283
 
 #define OVERWRITE_PER_PROP 0
 #define OVERWRITE_INSERT 1
@@ -559,6 +599,21 @@ inline BOOL Editor_QueryStatus(HWND hwnd, UINT nCmdID, BOOL* pbChecked)
 inline UINT Editor_GetSelText(HWND hwnd, UINT nBufferSize, LPWSTR szBuffer)
 {
 	return (UINT)SendMessage(hwnd, ME_GET_SEL_TEXT, (WPARAM)nBufferSize, (LPARAM)szBuffer);
+}
+
+// -----------------------------------------------------------------------------
+// Editor_GetSelText
+//   すべての文字列を取得します
+// パラメータ
+//   hwnd:        ウィンドウのハンドル
+//   nBufferSize: 終端文字を含むバッファのサイズ
+//   szBuffer:    文字列を取得するバッファへのポインタ
+// 戻り値
+//   nBufferSizeが0の場合はバッファに必要なサイズ、0以外の場合は使用されません
+
+inline UINT Editor_GetText(HWND hwnd, UINT nBufferSize, LPWSTR szBuffer)
+{
+	return (UINT)SendMessage(hwnd, ME_GET_TEXT, (WPARAM)nBufferSize, (LPARAM)szBuffer);
 }
 
 // -----------------------------------------------------------------------------

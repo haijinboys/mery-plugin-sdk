@@ -78,6 +78,39 @@ const
   DWRITE_CLEAR_TYPE_LEVEL = 258;
   DWRITE_RENDERING_MODE = 259;
 
+  // 2.6.10
+  ENCODING_NONE = 0;
+  ENCODING_UTF16LE = 65537;
+  ENCODING_UTF16LEBOM = 655371;
+  ENCODING_UTF16LENOBOM = 655370;
+  ENCODING_UTF16BE = 65538;
+  ENCODING_UTF16BEBOM = 655381;
+  ENCODING_UTF16BENOBOM = 655380;
+  ENCODING_UTF8 = 65001;
+  ENCODING_UTF8BOM = 650011;
+  ENCODING_UTF8NOBOM = 650010;
+  ENCODING_UTF7 = 65000;
+  ENCODING_ARABIC = 1256;
+  ENCODING_BALTIC = 1257;
+  ENCODING_CENTRALEUROPEAN = 1250;
+  ENCODING_CHINESESIMPLIFIED = 936;
+  ENCODING_CHINESETRADITIONAL = 950;
+  ENCODING_CYRILLIC = 1251;
+  ENCODING_GREEK = 1253;
+  ENCODING_HEBREW = 1255;
+  ENCODING_EUC = 51932;
+  ENCODING_JIS = 50222;
+  ENCODING_SHIFTJIS = 932;
+  ENCODING_KOREAN = 949;
+  ENCODING_THAI = 874;
+  ENCODING_TURKISH = 1254;
+  ENCODING_VIETNAMESE = 1258;
+  ENCODING_WESTERNEUROPEAN = 1252;
+
+  LINE_ENDING_CRLF = 0;
+  LINE_ENDING_CR = 1;
+  LINE_ENDING_LF = 2;
+
   CUSTOM_BAR_LEFT = 0;
   CUSTOM_BAR_TOP = 1;
   CUSTOM_BAR_RIGHT = 2;
@@ -168,6 +201,8 @@ const
   ME_GET_OUTPUT_STRING = ME_FIRST + 49;
   // 2.5.0
   ME_DO_IDLE = ME_FIRST + 50;
+  // 2.6.10
+  ME_GET_TEXT = ME_FIRST + 51;
   ME_LAST = ME_FIRST + 255;
 
   MI_GET_FILE_NAME = 256;
@@ -197,6 +232,11 @@ const
   MI_GET_GDI_COMPATIBLE = 278;
   // 2.6.6
   MI_GET_VERTICAL = 279;
+  // 2.6.10
+  MI_GET_ENCODE = 280;
+  MI_SET_ENCODE = 281;
+  MI_GET_LINE_ENDING = 282;
+  MI_SET_LINE_ENDING = 283;
 
   OVERWRITE_PER_PROP = 0;
   OVERWRITE_INSERT = 1;
@@ -532,6 +572,7 @@ function Editor_New(hwnd: THandle): THandle;
 function Editor_GetCmdID(hwnd: THandle; hInstance: THandle): Cardinal;
 function Editor_QueryStatus(hwnd: THandle; nCmdID: Cardinal; pbChecked: PBoolean): Boolean;
 function Editor_GetSelText(hwnd: THandle; nBufferSize: Cardinal; szBuffer: PChar): Cardinal;
+function Editor_GetText(hwnd: THandle; nBufferSize: Cardinal; szBuffer: PChar): Cardinal;
 function Editor_GetLines(hwnd: THandle; nLogical: Integer): Cardinal;
 function Editor_DocGetLines(hwnd: THandle; iDoc: Integer; nLogical: Integer): Cardinal;
 function Editor_GetLine(hwnd: THandle; PGetLineInfo: PGetLineInfo; szString: PChar): Cardinal;
@@ -646,6 +687,21 @@ end;
 function Editor_GetSelText(hwnd: THandle; nBufferSize: Cardinal; szBuffer: PChar): Cardinal;
 begin
   Result := Cardinal(SendMessage(hwnd, ME_GET_SEL_TEXT, WPARAM(nBufferSize), LPARAM(szBuffer)));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_GetText
+//   すべての文字列を取得します
+// パラメータ
+//   hwnd:        ウィンドウのハンドル
+//   nBufferSize: 終端文字を含むバッファのサイズ
+//   szBuffer:    文字列を取得するバッファへのポインタ
+// 戻り値
+//   nBufferSizeが0の場合はバッファに必要なサイズ、0以外の場合は使用されません
+
+function Editor_GetText(hwnd: THandle; nBufferSize: Cardinal; szBuffer: PChar): Cardinal;
+begin
+  Result := Cardinal(SendMessage(hwnd, ME_GET_TEXT, WPARAM(nBufferSize), LPARAM(szBuffer)));
 end;
 
 // -----------------------------------------------------------------------------

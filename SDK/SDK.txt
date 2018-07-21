@@ -21,7 +21,8 @@ www:    https://www.haijin-boys.com/
 		Delphi XE
 		Delphi XE2
 		Delphi 10 Seattle
-		Delphi 10.2 Tokyo Starter Edition
+		Delphi 10.1 Berlin
+		Delphi 10.2 Tokyo
 
 	▼ アーカイブ内容
 
@@ -48,6 +49,10 @@ www:    https://www.haijin-boys.com/
 	書籍掲載のご依頼などは info@haijin-boys.com までご連絡ください。
 
 ● 更新履歴
+
+	▼ 2018/07/21 (1.0.3)
+
+		Mery 2.6.10 に対応。
 
 	▼ 2017/10/22 (1.0.2)
 
