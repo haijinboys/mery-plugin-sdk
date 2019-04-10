@@ -27,6 +27,8 @@ Delphi 10.1 Berlin
 
 Delphi 10.2 Tokyo
 
+Delphi 10.3 Rio
+
 著作権
 ------
 Silk Icon Set
