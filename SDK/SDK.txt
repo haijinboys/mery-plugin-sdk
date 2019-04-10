@@ -23,6 +23,7 @@ www:    https://www.haijin-boys.com/
 		Delphi 10 Seattle
 		Delphi 10.1 Berlin
 		Delphi 10.2 Tokyo
+		Delphi 10.3 Rio
 
 	▼ アーカイブ内容
 
@@ -49,6 +50,11 @@ www:    https://www.haijin-boys.com/
 	書籍掲載のご依頼などは info@haijin-boys.com までご連絡ください。
 
 ● 更新履歴
+
+	▼ 2019/04/10 (1.0.4)
+
+		Mery 2.7.0 に対応。
+		ビルドできるようにダミーのアイコン素材を含めた。
 
 	▼ 2018/07/21 (1.0.3)
 
