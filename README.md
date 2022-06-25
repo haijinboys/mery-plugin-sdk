@@ -25,4 +25,4 @@ Mery のプラグインを開発するためのソフトウェア開発キット
 
 ## ライセンス
 
-[NYSL Version 0.9982](http://www.kmonos.net/nysl/) に従います。
+ソースコードは MIT ライセンスです。
