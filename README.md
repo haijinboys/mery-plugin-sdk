@@ -1,42 +1,28 @@
-プラグインソフトウェア開発キット
-================================
+# プラグインソフトウェア開発キット
 
-概要
-----
-Mery のプラグインを開発するための SDK です。
+Mery のプラグインを開発するためのソフトウェア開発キットです。
 
-開発環境
---------
-Microsoft Visual C++ 2008
+## はじめに
 
-Microsoft Visual C++ 2010
+**動作環境**
+- Microsoft Visual C++ 2008
+- Microsoft Visual C++ 2010
+- Microsoft Visual C++ 2013
+- Delphi XE2
+- Delphi 10 Seattle
+- Delphi 10.1 Berlin
+- Delphi 10.2 Tokyo
+- Delphi 10.3 Rio
+- Delphi 10.4 Sydney
 
-Microsoft Visual C++ 2013
+**アーカイブに含まれるファイル**
+- C/Basic: 基本的なサンプル
+- Delphi/Basic: 基本的なサンプル
+- Delphi/CustomBar: カスタムバーを使用したサンプル
+- Delphi/ToolBar: ツールバーを使用したサンプル
+- CHANGELOG.txt: 変更ログ
+- README.txt: 本ドキュメント
 
-Borland Delphi 6 Personal
+## ライセンス
 
-Turbo Delphi 2006 Explorer
-
-Delphi XE
-
-Delphi XE2
-
-Delphi 10 Seattle
-
-Delphi 10.1 Berlin
-
-Delphi 10.2 Tokyo
-
-Delphi 10.3 Rio
-
-著作権
-------
-Silk Icon Set
-
-http://www.famfamfam.com/lab/icons/silk/
-
-ライセンス
-----------
-NYSL Version 0.9982
-
-http://www.kmonos.net/nysl/
+[NYSL Version 0.9982](http://www.kmonos.net/nysl/) に従います。

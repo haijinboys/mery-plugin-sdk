@@ -3,12 +3,7 @@ unit mPlugin;
 interface
 
 uses
-{$IF CompilerVersion > 22.9}
   Winapi.Windows, Winapi.Messages;
-{$ELSE}
-  Windows, Messages;
-{$IFEND}
-
 
 const
   MAX_MODE_NAME = 260;
@@ -71,12 +66,17 @@ const
   COLOR_MARKER_8 = 53;
   COLOR_INDICATOR_MODIFIED = 54;
   COLOR_INDICATOR_SAVED = 55;
+  // 3.0.0
+  COLOR_MULTI_SELECTION = 56;
 
   // 2.5.0
   DWRITE_GAMMA = 256;
   DWRITE_ENHANCED_CONTRAST = 257;
   DWRITE_CLEAR_TYPE_LEVEL = 258;
   DWRITE_RENDERING_MODE = 259;
+
+  // 3.1.0
+  DWRITE_TEXT_ANTIALIAS_MODE = 260;
 
   // 2.6.10
   ENCODING_NONE = 0;
@@ -111,6 +111,16 @@ const
   LINE_ENDING_CR = 1;
   LINE_ENDING_LF = 2;
 
+  // 2.8.7
+  INDENT_STYLE_UNSET = 0;
+  INDENT_STYLE_TAB = 1;
+  INDENT_STYLE_SPACE = 2;
+
+  // 2.8.7
+  TRIBOOL_FALSE = 0;
+  TRIBOOL_TRUE = 1;
+  TRIBOOL_UNKNOWN = 2;
+
   CUSTOM_BAR_LEFT = 0;
   CUSTOM_BAR_TOP = 1;
   CUSTOM_BAR_RIGHT = 2;
@@ -144,6 +154,10 @@ const
   EVENT_FILE_SAVING = $00800000;
   // 2.4.0
   EVENT_DPI_CHANGED = $01000000;
+  // 2.8.1
+  EVENT_TOOL_BAR_CHANGED = $02000000;
+  // 3.2.0
+  EVENT_APP_MODE_CHANGED = $04000000;
 
   CLOSED_FRAME_WINDOW = 1;
   CLOSED_ANOTHER_CUSTOM_BAR = 2;
@@ -203,6 +217,13 @@ const
   ME_DO_IDLE = ME_FIRST + 50;
   // 2.6.10
   ME_GET_TEXT = ME_FIRST + 51;
+  // 3.3.2
+  ME_ADD_UNDO = ME_FIRST + 52;
+  ME_BEGIN_UNDO_GROUP = ME_FIRST + 53;
+  ME_END_UNDO_GROUP = ME_FIRST + 54;
+  ME_RUN_MACRO = ME_FIRST + 55;
+  ME_GET_MULTI_SEL = ME_FIRST + 56;
+  ME_SET_MULTI_SEL = ME_FIRST + 57;
   ME_LAST = ME_FIRST + 255;
 
   MI_GET_FILE_NAME = 256;
@@ -233,10 +254,39 @@ const
   // 2.6.6
   MI_GET_VERTICAL = 279;
   // 2.6.10
-  MI_GET_ENCODE = 280;
-  MI_SET_ENCODE = 281;
+  MI_GET_ENCODING = 280;
+  MI_SET_ENCODING = 281;
   MI_GET_LINE_ENDING = 282;
   MI_SET_LINE_ENDING = 283;
+  // 2.8.7
+  MI_GET_INDENT_STYLE = 284;
+  MI_SET_INDENT_STYLE = 285;
+  MI_GET_INDENT_SIZE = 286;
+  MI_SET_INDENT_SIZE = 287;
+  MI_GET_TRIM_TRAILING_WHITESPACE = 288;
+  MI_SET_TRIM_TRAILING_WHITESPACE = 289;
+  MI_GET_INSERT_FINAL_NEWLINE = 290;
+  MI_SET_INSERT_FINAL_NEWLINE = 291;
+  // 3.1.0
+  MI_GET_DWRITE_AUTODETECT = 292;
+  MI_GET_MAX_LINE_LENGTH = 293;
+  MI_SET_MAX_LINE_LENGTH = 294;
+  // 3.2.0
+  MI_GET_DARK_MODE = 295;
+  // 3.3.0
+  MI_GET_LIGATURES_ENABLED = 296;
+  // 3.3.1
+  MI_GET_HALF_WIDTH_ENABLED = 297;
+  // 3.3.2
+  MI_GET_READ_ONLY = 298;
+
+  RUN_FILE = 0;
+  RUN_TEXT = 1;
+
+  MACRO_LANG_JSCRIPT = 0;
+  MACRO_LANG_VBSCRIPT = 1;
+  MACRO_LANG_CHAKRA = 2;
+  MACRO_LANG_UNKNOWN = $FF;
 
   OVERWRITE_PER_PROP = 0;
   OVERWRITE_INSERT = 1;
@@ -273,11 +323,19 @@ const
   FLAG_FIND_CLOSE = $00000200;
   FLAG_FIND_FILENAMES_ONLY = $00000400;
   FLAG_REPLACE_BACKUP = $00000800;
+  FLAG_FIND_MIGEMO = $00001000;
   FLAG_LOGICAL = 1;
   FLAG_WITH_CRLF = 2;
   FLAG_GET_CRLF_BYTE = 4;
   FLAG_CR_ONLY = 1;
   FLAG_LF_ONLY = 2;
+  // 3.0.0
+  SEL_TYPE_MULTI = 3;
+  // 3.3.6
+  POS_SCROLL_DONT_CARE = $0000000;
+  POS_SCROLL_CENTER = $0000010;
+  POS_SCROLL_TOP = $0000020;
+  POS_SCROLL_ALWAYS = $0000040;
 
   MP_FIRST = WM_USER + $0500;
   MP_QUERY_PROPERTIES = MP_FIRST + 0;
@@ -502,6 +560,33 @@ const
   MEID_VIEW_TYPEWRITER_SCROLL = 2247;
   // 2.7.0
   MEID_WINDOW_SHOW_MARKERS = 2248;
+  // 2.7.5
+  MEID_FILE_CLOSE_OTHERS = 2249;
+  MEID_FILE_CLOSE_LEFT = 2250;
+  MEID_FILE_CLOSE_RIGHT = 2251;
+  // 2.7.9
+  MEID_VIEW_MACROS_BAR_LABELS = 2252;
+  // 2.8.7
+  MEID_WINDOW_NEW_GROUP = 2253;
+  // 3.0.0
+  MEID_EDIT_SPLIT_SEL_INTO_LINES = 2254;
+  MEID_EDIT_ADD_CURSOR_TO_NEXT_LINE = 2255;
+  MEID_EDIT_ADD_CURSOR_TO_PREV_LINE = 2256;
+  MEID_SEARCH_FIND_ALL_AND_SELECT = 2257;
+  MEID_SEARCH_ADD_NEXT_MATCH = 2258;
+  MEID_SEARCH_SKIP_CURRENT_MATCH = 2259;
+  MEID_SEARCH_UNDO_SELECTION = 2260;
+  MEID_SEARCH_REDO_SELECTION = 2261;
+  // 3.1.0
+  MEID_WINDOW_RIGHT = 2262;
+  MEID_WINDOW_LEFT = 2263;
+  // 3.3.6
+  MEID_EDIT_TOGGLE_IME = 2264;
+  // 3.3.7
+  MEID_FILE_SAVE_CLOSE_ALL_DESKTOP = 2265;
+  MEID_FILE_CLOSE_ALL_DESKTOP = 2266;
+  MEID_WINDOW_NEW_GROUP_HORZ = 2267;
+  MEID_WINDOW_NEW_GROUP_VERT = 2268;
 
   MEID_DICTS = 4096;
   MEID_MODES = 5120;
@@ -574,9 +659,31 @@ type
     nID: Cardinal;
     nFlags: Cardinal;
     bVisible: Boolean;
+    iIndex: Integer;
+    bBreak: Boolean;
+    iWidth: Integer;
   end;
 
   PToolBarInfo = ^TToolBarInfo;
+
+  TRunMacroInfo = record
+    cbSize: Cardinal;
+    pszMacroFile: PChar;
+    pszText: PChar;
+    nFlags: Cardinal;
+    nDefMacroLang: Cardinal;
+    ptErrorPos: TPoint;
+  end;
+
+  PRunMacroInfo = ^TRunMacroInfo;
+
+  TSelInfo = record
+    cbSize: Cardinal;
+    ptStart: TPoint;
+    ptEnd: TPoint;
+  end;
+
+  PSelInfo = ^TSelInfo;
 
 function Editor_New(hwnd: THandle): THandle;
 function Editor_GetCmdID(hwnd: THandle; hInstance: THandle): Cardinal;
@@ -639,6 +746,12 @@ function Editor_ToolBarShow(hwnd: THandle; nToolBarID: Cardinal; bVisible: Boole
 function Editor_OutputString(hwnd: THandle; szString: PChar; nFlags: Cardinal): Boolean;
 function Editor_GetOutputString(hwnd: THandle; cchBuf: Cardinal; pBuf: PChar): Cardinal;
 procedure Editor_DoIdle(hwnd: THandle);
+procedure Editor_AddUndo(hwnd: THandle);
+procedure Editor_BeginUndoGroup(hwnd: THandle);
+procedure Editor_EndUndoGroup(hwnd: THandle);
+function Editor_RunMacro(hwnd: THandle; nFlags: Cardinal; nDefMacroLang: Cardinal; pszMacroFile: PChar; pszText: PChar; pptErrorPos: PPoint): HRESULT;
+function Editor_GetMultiSel(hwnd: THandle; iSel: Integer; pSelInfo: PSelInfo): Integer;
+function Editor_SetMultiSel(hwnd: THandle; iSel: Integer; const pSelInfo: PSelInfo): Boolean;
 
 implementation
 
@@ -1578,6 +1691,111 @@ end;
 procedure Editor_DoIdle(hwnd: THandle);
 begin
   SendMessage(hwnd, ME_DO_IDLE, 0, 0);
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_AddUndo
+//   元に戻す情報を追加します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+// 戻り値
+//   使用されません
+
+procedure Editor_AddUndo(hwnd: THandle);
+begin
+  SendMessage(hwnd, ME_ADD_UNDO, 0, 0);
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_BeginUndoGroup
+//   元に戻すグループを開始します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+// 戻り値
+//   使用されません
+
+procedure Editor_BeginUndoGroup(hwnd: THandle);
+begin
+  SendMessage(hwnd, ME_BEGIN_UNDO_GROUP, 0, 0);
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_EndUndoGroup
+//   元に戻すグループを終了します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+// 戻り値
+//   使用されません
+
+procedure Editor_EndUndoGroup(hwnd: THandle);
+begin
+  SendMessage(hwnd, ME_END_UNDO_GROUP, 0, 0);
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_RunMacro
+//   マクロを実行します
+// パラメータ
+//   hwnd:          ウィンドウのハンドル
+//   nFlags:        RUN_FILE, RUN_TEXT
+//   nDefMacroLang: MACRO_LANG_JSCRIPT, MACRO_LANG_VBSCRIPT, MACRO_LANG_UNKNOWN
+//   pszMacroFile:  マクロファイルのパス
+//   pszText:       マクロテキスト
+//   pptErrorPos:   マクロのエラー位置
+// 戻り値
+//   S_OK:    操作に成功しました
+//   S_FALSE: マクロエラーが発生しました
+//   E_FAIL:  致命的なエラーが発生しました
+
+function Editor_RunMacro(hwnd: THandle; nFlags: Cardinal; nDefMacroLang: Cardinal; pszMacroFile: PChar; pszText: PChar; pptErrorPos: PPoint): HRESULT;
+var
+  LRunMacroInfo: TRunMacroInfo;
+  HR: HRESULT;
+begin
+  LRunMacroInfo.cbSize := SizeOf(TRunMacroInfo);
+  LRunMacroInfo.pszMacroFile := pszMacroFile;
+  LRunMacroInfo.pszText := pszText;
+  LRunMacroInfo.nFlags := nFlags;
+  LRunMacroInfo.nDefMacroLang := nDefMacroLang;
+  LRunMacroInfo.ptErrorPos.X := -1;
+  LRunMacroInfo.ptErrorPos.Y := -1;
+  HR := SendMessage(hwnd, ME_RUN_MACRO, 0, LPARAM(@LRunMacroInfo));
+  if pptErrorPos <> nil then
+  begin
+    pptErrorPos.X := LRunMacroInfo.ptErrorPos.X;
+    pptErrorPos.Y := LRunMacroInfo.ptErrorPos.Y;
+  end;
+  Result := HR;
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_GetMultiSel
+//   複数選択を取得します
+// パラメータ
+//   hwnd:     ウィンドウのハンドル
+//   iSel:     選択範囲のインデックス
+//   pSelInfo: TSelInfo へのポインタ
+// 戻り値
+//   iSel に -1 を指定した場合は選択範囲の数、それ以外の場合は選択範囲に関する情報と True、複数選択でない場合やエラーが発生した場合は False を返します
+
+function Editor_GetMultiSel(hwnd: THandle; iSel: Integer; pSelInfo: PSelInfo): Integer;
+begin
+  Result := SendMessage(hwnd, ME_GET_MULTI_SEL, WPARAM(iSel), LPARAM(pSelInfo));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_SetMultiSel
+//   複数選択を設定します
+// パラメータ
+//   hwnd:     ウィンドウのハンドル
+//   iSel:     選択範囲のインデックス
+//   pSelInfo: TSelInfo へのポインタ
+// 戻り値
+//   選択範囲に関する情報を設定した場合は True、複数選択でない場合やエラーが発生した場合は False を返します
+
+function Editor_SetMultiSel(hwnd: THandle; iSel: Integer; const pSelInfo: PSelInfo): Boolean;
+begin
+  Result := Boolean(SendMessage(hwnd, ME_SET_MULTI_SEL, WPARAM(iSel), LPARAM(pSelInfo)));
 end;
 
 end.

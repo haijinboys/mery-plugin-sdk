@@ -7,6 +7,6 @@ IDI_ICON ICON "CustomBar_Icon.ico"
 STRINGTABLE
 LANGUAGE LANG_JAPANESE, 0x1
 {
-	IDS_MENU_TEXT, "カスタムバーを使用したサンプル"
-	IDS_STATUS_MESSAGE, "カスタムバーを使用したサンプル|カスタムバーを使用したサンプルです。"
+	IDS_MENU_TEXT, "カスタム バーを使用したサンプル"
+	IDS_STATUS_MESSAGE, "カスタム バーを使用したサンプル|カスタム バーを使用したサンプルです。"
 }

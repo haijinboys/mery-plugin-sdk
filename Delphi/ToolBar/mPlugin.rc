@@ -1,0 +1,12 @@
+#define IDS_MENU_TEXT 1
+#define IDS_STATUS_MESSAGE 2
+#define IDI_ICON 101
+
+IDI_ICON ICON "ToolBar_Icon.ico"
+
+STRINGTABLE
+LANGUAGE LANG_JAPANESE, 0x1
+{
+	IDS_MENU_TEXT, "ツール バーを使用したサンプル"
+	IDS_STATUS_MESSAGE, "ツール バーを使用したサンプル|ツール バーを使用したサンプルです。"
+}

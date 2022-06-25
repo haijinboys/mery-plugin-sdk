@@ -11,12 +11,7 @@ unit mFrame;
 interface
 
 uses
-{$IF CompilerVersion > 22.9}
   Winapi.Windows, Winapi.Messages, System.Classes;
-{$ELSE}
-  Windows, Messages, Classes;
-{$IFEND}
-
 
 type
   TFrame = class(TPersistent)

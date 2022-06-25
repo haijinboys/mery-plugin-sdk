@@ -3,10 +3,10 @@ unit mCustomBar;
 interface
 
 uses
-  Windows, Messages, SysUtils, mMain, mFrame, mPlugin;
+  Winapi.Windows, Winapi.Messages, System.SysUtils, mMain, mFrame, mPlugin;
 
 resourcestring
-  SName = 'カスタムバーを使用したサンプル';
+  SName = 'カスタム バーを使用したサンプル';
   SVersion = '1.0.0';
 
 type

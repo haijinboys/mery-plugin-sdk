@@ -60,12 +60,17 @@
 #define COLOR_MARKER_8 53
 #define COLOR_INDICATOR_MODIFIED 54
 #define COLOR_INDICATOR_SAVED 55
+// 3.0.0
+#define COLOR_MULTI_SELECTION 56
 
 // 2.5.0
 #define DWRITE_GAMMA 256
 #define DWRITE_ENHANCED_CONTRAST 257
 #define DWRITE_CLEAR_TYPE_LEVEL 258
 #define DWRITE_RENDERING_MODE 259
+
+// 3.1.0
+#define DWRITE_TEXT_ANTIALIAS_MODE 260
 
 // 2.6.10
 #define ENCODING_NONE 0
@@ -100,6 +105,16 @@
 #define LINE_ENDING_CR 1
 #define LINE_ENDING_LF 2
 
+// 2.8.7
+#define INDENT_STYLE_UNSET 0
+#define INDENT_STYLE_TAB 1
+#define INDENT_STYLE_SPACE 2
+
+// 2.8.7
+#define TRIBOOL_FALSE 0
+#define TRIBOOL_TRUE 1
+#define TRIBOOL_UNKNOWN 2
+
 #define CUSTOM_BAR_LEFT 0
 #define CUSTOM_BAR_TOP 1
 #define CUSTOM_BAR_RIGHT 2
@@ -133,6 +148,10 @@
 #define EVENT_FILE_SAVING 0x00800000
 // 2.4.0
 #define EVENT_DPI_CHANGED 0x01000000
+// 2.8.1
+#define EVENT_TOOL_BAR_CHANGED 0x02000000
+// 3.2.0
+#define EVENT_APP_MODE_CHANGED 0x04000000
 
 #define CLOSED_FRAME_WINDOW 1
 #define CLOSED_ANOTHER_CUSTOM_BAR 2
@@ -192,6 +211,13 @@
 #define ME_DO_IDLE (ME_FIRST + 50)
 // 2.6.10
 #define ME_GET_TEXT (ME_FIRST + 51)
+// 3.3.2
+#define ME_ADD_UNDO (ME_FIRST + 52)
+#define ME_BEGIN_UNDO_GROUP (ME_FIRST + 53)
+#define ME_END_UNDO_GROUP (ME_FIRST + 54)
+#define ME_RUN_MACRO (ME_FIRST + 55)
+#define ME_GET_MULTI_SEL (ME_FIRST + 56)
+#define ME_SET_MULTI_SEL (ME_FIRST + 57)
 #define ME_LAST (ME_FIRST + 255)
 
 #define MI_GET_FILE_NAME 256
@@ -226,6 +252,35 @@
 #define MI_SET_ENCODE 281
 #define MI_GET_LINE_ENDING 282
 #define MI_SET_LINE_ENDING 283
+// 2.8.7
+#define MI_GET_INDENT_STYLE 284
+#define MI_SET_INDENT_STYLE 285
+#define MI_GET_INDENT_SIZE 286
+#define MI_SET_INDENT_SIZE 287
+#define MI_GET_TRIM_TRAILING_WHITESPACE 288
+#define MI_SET_TRIM_TRAILING_WHITESPACE 289
+#define MI_GET_INSERT_FINAL_NEWLINE 290
+#define MI_SET_INSERT_FINAL_NEWLINE 291
+// 3.1.0
+#define MI_GET_DWRITE_AUTODETECT 292
+#define MI_GET_MAX_LINE_LENGTH 293
+#define MI_SET_MAX_LINE_LENGTH 294
+// 3.2.0
+#define MI_GET_DARK_MODE 295
+// 3.3.0
+#define MI_GET_LIGATURES_ENABLED 296
+// 3.3.1
+#define MI_GET_HALF_WIDTH_ENABLED 297
+// 3.3.2
+#define MI_GET_READ_ONLY 298
+
+#define RUN_FILE 0
+#define RUN_TEXT 1
+
+#define MACRO_LANG_JSCRIPT 0
+#define MACRO_LANG_VBSCRIPT 1
+#define MACRO_LANG_CHAKRA 2
+#define MACRO_LANG_UNKNOWN $FF
 
 #define OVERWRITE_PER_PROP 0
 #define OVERWRITE_INSERT 1
@@ -262,11 +317,19 @@
 #define FLAG_FIND_CLOSE 0x00000200
 #define FLAG_FIND_FILENAMES_ONLY 0x00000400
 #define FLAG_REPLACE_BACKUP 0x00000800
+#define FLAG_FIND_MIGEMO 0x00001000
 #define FLAG_LOGICAL 1
 #define FLAG_WITH_CRLF 2
 #define FLAG_GET_CRLF_BYTE 4
 #define FLAG_CR_ONLY 1
 #define FLAG_LF_ONLY 2
+// 3.0.0
+#define SEL_TYPE_MULTI 3
+// 3.3.6
+#define POS_SCROLL_DONT_CARE 0x0000000
+#define POS_SCROLL_CENTER 0x0000010
+#define POS_SCROLL_TOP 0x0000020
+#define POS_SCROLL_ALWAYS 0x0000040
 
 #define MP_FIRST (WM_USER + 0x0500)
 #define MP_QUERY_PROPERTIES (MP_FIRST + 0)
@@ -407,8 +470,8 @@
 #define MEID_MACROS_CUSTOMIZE 2176
 #define MEID_TOOLS_OPTIONS 2177
 #define MEID_TOOLS_COMPLETION 2178
-#define MEID_TOOLS_SQL_FORMAT 2179
-#define MEID_TOOLS_XML_FORMAT 2180
+#define MEID_TOOLS_HTML_FORMAT 2179
+#define MEID_TOOLS_SQL_FORMAT 2180
 #define MEID_TOOLS_PLUGIN_CUSTOMIZE 2181
 #define MEID_TOOLS_TOOL_CUSTOMIZE 2182
 #define MEID_TOOLS_TERMINATE_TOOL 2183
@@ -491,6 +554,33 @@
 #define MEID_VIEW_TYPEWRITER_SCROLL 2247
 // 2.7.0
 #define MEID_WINDOW_SHOW_MARKERS 2248
+// 2.7.5
+#define MEID_FILE_CLOSE_OTHERS 2249
+#define MEID_FILE_CLOSE_LEFT 2250
+#define MEID_FILE_CLOSE_RIGHT 2251
+// 2.7.9
+#define MEID_VIEW_MACROS_BAR_LABELS 2252
+// 2.8.7
+#define MEID_WINDOW_NEW_GROUP 2253
+// 3.0.0
+#define MEID_EDIT_SPLIT_SEL_INTO_LINES 2254
+#define MEID_EDIT_ADD_CURSOR_TO_NEXT_LINE 2255
+#define MEID_EDIT_ADD_CURSOR_TO_PREV_LINE 2256
+#define MEID_SEARCH_FIND_ALL_AND_SELECT 2257
+#define MEID_SEARCH_ADD_NEXT_MATCH 2258
+#define MEID_SEARCH_SKIP_CURRENT_MATCH 2259
+#define MEID_SEARCH_UNDO_SELECTION 2260
+#define MEID_SEARCH_REDO_SELECTION 2261
+// 3.1.0
+#define MEID_WINDOW_RIGHT 2262
+#define MEID_WINDOW_LEFT 2263
+// 3.3.6
+#define MEID_EDIT_TOGGLE_IME 2264
+// 3.3.7
+#define MEID_FILE_SAVE_CLOSE_ALL_DESKTOP 2265
+#define MEID_FILE_CLOSE_ALL_DESKTOP 2266
+#define MEID_WINDOW_NEW_GROUP_HORZ 2267
+#define MEID_WINDOW_NEW_GROUP_VERT 2268
 
 #define MEID_DICTS 4096
 #define MEID_MODES 5120
@@ -552,7 +642,31 @@ typedef struct _TOOLBAR_INFO
 	UINT nID;
 	UINT nFlags;
 	BOOL bVisible;
+	int iIndex;
+	BOOL bBreak;
+	int iWidth;
 } TOOLBAR_INFO;
+
+typedef struct tagPOINT_PTR
+{
+	int  x;
+	int  y;
+} POINT_PTR, * PPOINT_PTR;
+
+typedef struct _RUN_MACRO_INFO {
+	UINT  cbSize;
+	LPCWSTR pszMacroFile;
+	LPCWSTR pszText;
+	UINT nFlags;
+	UINT nDefMacroLang;
+	POINT_PTR ptErrorPos;
+} RUN_MACRO_INFO;
+
+typedef struct _SEL_INFO {
+	UINT cbSize;
+	POINT_PTR ptStart;
+	POINT_PTR ptEnd;
+} SEL_INFO;
 
 // -----------------------------------------------------------------------------
 // Editor_New
@@ -1499,4 +1613,105 @@ inline UINT Editor_GetOutputString(HWND hwnd, UINT cchBuf, LPWSTR pBuf)
 inline void Editor_DoIdle(HWND hwnd)
 {
 	SendMessage(hwnd, ME_DO_IDLE, (WPARAM)0, (LPARAM)0);
+}
+
+// -----------------------------------------------------------------------------
+// Editor_AddUndo
+//   元に戻す情報を追加します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+// 戻り値
+//   使用されません
+
+inline void Editor_AddUndo(HWND hwnd)
+{
+	SendMessage(hwnd, ME_ADD_UNDO, (WPARAM)0, (LPARAM)0);
+}
+
+// -----------------------------------------------------------------------------
+// Editor_BeginUndoGroup
+//   元に戻すグループを開始します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+// 戻り値
+//   使用されません
+
+inline void Editor_BeginUndoGroup(HWND hwnd)
+{
+	SendMessage(hwnd, ME_BEGIN_UNDO_GROUP, (WPARAM)0, (LPARAM)0);
+}
+
+// -----------------------------------------------------------------------------
+// Editor_EndUndoGroup
+//   元に戻すグループを終了します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+// 戻り値
+//   使用されません
+
+inline void Editor_EndUndoGroup(HWND hwnd)
+{
+	SendMessage(hwnd, ME_END_UNDO_GROUP, (WPARAM)0, (LPARAM)0);
+}
+
+// -----------------------------------------------------------------------------
+// Editor_RunMacro
+//   マクロを実行します
+// パラメータ
+//   hwnd:          ウィンドウのハンドル
+//   nFlags:        RUN_FILE, RUN_TEXT
+//   nDefMacroLang: MACRO_LANG_JSCRIPT, MACRO_LANG_VBSCRIPT, MACRO_LANG_UNKNOWN
+//   pszMacroFile:  マクロファイルのパス
+//   pszText:       マクロテキスト
+//   pptErrorPos:   マクロのエラー位置
+// 戻り値
+//   S_OK:    操作に成功しました
+//   S_FALSE: マクロエラーが発生しました
+//   E_FAIL:  致命的なエラーが発生しました
+
+inline HRESULT Editor_RunMacro(HWND hwnd, UINT nFlags, UINT nDefMacroLang, LPCWSTR pszMacroFile, LPCWSTR pszText, POINT_PTR* pptErrorPos)
+{
+	RUN_MACRO_INFO rmi = { 0 };
+	rmi.cbSize = sizeof(rmi);
+	rmi.pszMacroFile = pszMacroFile;
+	rmi.pszText = pszText;
+	rmi.nFlags = nFlags;
+	rmi.nDefMacroLang = nDefMacroLang;
+	rmi.ptErrorPos.x = rmi.ptErrorPos.y = -1;
+	HRESULT hr = (HRESULT)SendMessage(hwnd, ME_RUN_MACRO, 0, (LPARAM)&rmi);
+	if (pptErrorPos) {
+		pptErrorPos->x = rmi.ptErrorPos.x;
+		pptErrorPos->y = rmi.ptErrorPos.y;
+	}
+	return hr;
+}
+
+// -----------------------------------------------------------------------------
+// Editor_GetMultiSel
+//   複数選択を取得します
+// パラメータ
+//   hwnd:     ウィンドウのハンドル
+//   iSel:     選択範囲のインデックス
+//   pSelInfo: TSelInfo へのポインタ
+// 戻り値
+//   iSel に -1 を指定した場合は選択範囲の数、それ以外の場合は選択範囲に関する情報と True、複数選択でない場合やエラーが発生した場合は False を返します
+
+inline UINT_PTR Editor_GetMultiSel(HWND hwnd, int iSel, SEL_INFO* pSelInfo)
+{
+	return (UINT_PTR)SendMessage(hwnd, ME_GET_MULTI_SEL, (WPARAM)iSel, (LPARAM)pSelInfo);
+}
+
+// -----------------------------------------------------------------------------
+// Editor_SetMultiSel
+//   複数選択を設定します
+// パラメータ
+//   hwnd:     ウィンドウのハンドル
+//   iSel:     選択範囲のインデックス
+//   pSelInfo: TSelInfo へのポインタ
+// 戻り値
+//   選択範囲に関する情報を設定した場合は True、複数選択でない場合やエラーが発生した場合は False を返します
+
+inline UINT_PTR Editor_SetMultiSel(HWND hwnd, int iSel, const SEL_INFO* pSelInfo)
+{
+	return (UINT_PTR)SendMessage(hwnd, ME_SET_MULTI_SEL, (WPARAM)iSel, (LPARAM)pSelInfo);
 }
