@@ -1,3 +1,8 @@
+// -----------------------------------------------------------------------------
+// Copyright (c) Kuro. All rights reserved.
+// Licensed under the MIT License.
+// -----------------------------------------------------------------------------
+
 #pragma once
 
 #define MAX_MODE_NAME 260
@@ -62,6 +67,8 @@
 #define COLOR_INDICATOR_SAVED 55
 // 3.0.0
 #define COLOR_MULTI_SELECTION 56
+// 3.5.6
+#define COLOR_INDENT_GUIDES 57
 
 // 2.5.0
 #define DWRITE_GAMMA 256
@@ -152,6 +159,9 @@
 #define EVENT_TOOL_BAR_CHANGED 0x02000000
 // 3.2.0
 #define EVENT_APP_MODE_CHANGED 0x04000000
+// 3.4.0
+#define EVENT_CUSTOM_BAR_DROP_TEXT = 0x08000000;
+#define EVENT_TOOL_BAR_DROP_TEXT = 0x10000000;
 
 #define CLOSED_FRAME_WINDOW 1
 #define CLOSED_ANOTHER_CUSTOM_BAR 2
@@ -218,6 +228,12 @@
 #define ME_RUN_MACRO (ME_FIRST + 55)
 #define ME_GET_MULTI_SEL (ME_FIRST + 56)
 #define ME_SET_MULTI_SEL (ME_FIRST + 57)
+// 3.4.0
+#define ME_GET_DROPPED_TEXT (ME_FIRST + 58)
+// 3.7.2
+#define ME_GET_PAGE_SIZE (ME_FIRST + 59)
+#define ME_DEV_TO_VIEW (ME_FIRST + 60)
+#define ME_VIEW_TO_DEV (ME_FIRST + 61)
 #define ME_LAST (ME_FIRST + 255)
 
 #define MI_GET_FILE_NAME 256
@@ -273,6 +289,10 @@
 #define MI_GET_HALF_WIDTH_ENABLED 297
 // 3.3.2
 #define MI_GET_READ_ONLY 298
+// 3.5.9
+#define MI_GET_FONT_HEIGHT 299
+// 3.7.0
+#define MI_GET_USE_MICA 300
 
 #define RUN_FILE 0
 #define RUN_TEXT 1
@@ -295,16 +315,23 @@
 #define POS_VIEW 0
 #define POS_LOGICAL 1
 #define POS_DEV 2
+
 #define MAX_LINE_COLUMN_MODE 4
+
 #define SEL_TYPE_NONE 0
 #define SEL_TYPE_CHAR 1
 #define SEL_TYPE_BOX 2
+// 3.0.0
+#define SEL_TYPE_MULTI 3
+
 #define FLAG_MAKE_LOWER 0
 #define FLAG_MAKE_UPPER 1
 #define FLAG_HAN_TO_ZEN 2
 #define FLAG_ZEN_TO_HAN 3
 #define FLAG_CAPITALIZE 4
+
 #define FLAG_CONVERT_SELECT_ALL 0x0100
+
 #define FLAG_FIND_NEXT 0x00000001
 #define FLAG_REPLACE_ALL 0x00000002
 #define FLAG_FIND_OPEN_DOC 0x00000004
@@ -318,18 +345,27 @@
 #define FLAG_FIND_FILENAMES_ONLY 0x00000400
 #define FLAG_REPLACE_BACKUP 0x00000800
 #define FLAG_FIND_MIGEMO 0x00001000
+// 3.5.0
+#define FLAG_FIND_FUZZY 0x00002000
+// 3.5.1
+#define FLAG_FIND_SEL_ONLY FLAG_REPLACE_SEL_ONLY
+
 #define FLAG_LOGICAL 1
 #define FLAG_WITH_CRLF 2
 #define FLAG_GET_CRLF_BYTE 4
+
 #define FLAG_CR_ONLY 1
 #define FLAG_LF_ONLY 2
-// 3.0.0
-#define SEL_TYPE_MULTI 3
+
 // 3.3.6
 #define POS_SCROLL_DONT_CARE 0x0000000
 #define POS_SCROLL_CENTER 0x0000010
 #define POS_SCROLL_TOP 0x0000020
 #define POS_SCROLL_ALWAYS 0x0000040
+
+// 3.5.5
+#define MAX_MRU_FILE_COUNT 256
+#define MAX_PINNED_FILE_COUNT 256
 
 #define MP_FIRST (WM_USER + 0x0500)
 #define MP_QUERY_PROPERTIES (MP_FIRST + 0)
@@ -581,12 +617,96 @@
 #define MEID_FILE_CLOSE_ALL_DESKTOP 2266
 #define MEID_WINDOW_NEW_GROUP_HORZ 2267
 #define MEID_WINDOW_NEW_GROUP_VERT 2268
+// 3.4.1
+#define MEID_MACROS_STOP 2269
+#define MEID_WINDOW_MOVE_NEXT_GROUP 2270
+#define MEID_WINDOW_MOVE_PREV_GROUP 2271
+#define MEID_WINDOW_MOVE_NEXT 2272
+#define MEID_WINDOW_MOVE_PREV 2273
+// 3.5.4
+#define MEID_VIEW_MARKERS_BAR_TEXT 2274
+// 3.5.5
+#define MEID_FILE_MRU_FILE1 2275 // to MEID_FILE_MRU_FILE1 + 255 (2530)
+#define MEID_FILE_PINNED_FILE1 2531 // to MEID_FILE_PINNED_FILE1 + 255 (2786)
+// 3.5.6
+#define MEID_VIEW_SHOW_WRAP_LINE 2787
+#define MEID_VIEW_SHOW_INDENT_GUIDES 2788
+#define MEID_VIEW_SHOW_CARET_LINE 2789
+#define MEID_VIEW_AUTO_INDENT 2790
+#define MEID_VIEW_WRAP_INDENT 2791
+// 3.5.9
+#define MEID_EDIT_CREATE_GUID 2792
+// 3.6.1
+#define MEID_EDIT_DELETE_LEFT 2793
+#define MEID_EDIT_CHAR_RIGHT 2794
+#define MEID_EDIT_CHAR_LEFT 2795
+#define MEID_EDIT_WORD_RIGHT 2796
+#define MEID_EDIT_WORD_LEFT 2797
+#define MEID_EDIT_LINE_UP 2798
+#define MEID_EDIT_LINE_DOWN 2799
+#define MEID_EDIT_PAGE_UP 2800
+#define MEID_EDIT_PAGE_DOWN 2801
+#define MEID_EDIT_LINE_START 2802
+#define MEID_EDIT_TEXT_START 2803
+#define MEID_EDIT_LINE_END 2804
+#define MEID_EDIT_DOCUMENT_START 2805
+#define MEID_EDIT_DOCUMENT_END 2806
+#define MEID_EDIT_GO_TO_BRACKET 2807
+#define MEID_EDIT_SELECT_CHAR 2808
+#define MEID_EDIT_SELECT_BOX 2809
+#define MEID_EDIT_CHAR_RIGHT_EXTEND 2810
+#define MEID_EDIT_CHAR_LEFT_EXTEND 2811
+#define MEID_EDIT_WORD_RIGHT_EXTEND 2812
+#define MEID_EDIT_WORD_LEFT_EXTEND 2813
+#define MEID_EDIT_LINE_UP_EXTEND 2814
+#define MEID_EDIT_LINE_DOWN_EXTEND 2815
+#define MEID_EDIT_PAGE_UP_EXTEND 2816
+#define MEID_EDIT_PAGE_DOWN_EXTEND 2817
+#define MEID_EDIT_LINE_START_EXTEND 2818
+#define MEID_EDIT_TEXT_START_EXTEND 2819
+#define MEID_EDIT_LINE_END_EXTEND 2820
+#define MEID_EDIT_DOCUMENT_START_EXTEND 2821
+#define MEID_EDIT_DOCUMENT_END_EXTEND 2822
+#define MEID_EDIT_GO_TO_BRACKET_EXTEND 2823
+#define MEID_EDIT_CHAR_RIGHT_EXTEND_BOX 2824
+#define MEID_EDIT_CHAR_LEFT_EXTEND_BOX 2825
+#define MEID_EDIT_WORD_RIGHT_EXTEND_BOX 2826
+#define MEID_EDIT_WORD_LEFT_EXTEND_BOX 2827
+#define MEID_EDIT_LINE_UP_EXTEND_BOX 2828
+#define MEID_EDIT_LINE_DOWN_EXTEND_BOX 2829
+#define MEID_EDIT_PAGE_UP_EXTEND_BOX 2830
+#define MEID_EDIT_PAGE_DOWN_EXTEND_BOX 2831
+#define MEID_EDIT_LINE_START_EXTEND_BOX 2832
+#define MEID_EDIT_TEXT_START_EXTEND_BOX 2833
+#define MEID_EDIT_LINE_END_EXTEND_BOX 2834
+#define MEID_EDIT_DOCUMENT_START_EXTEND_BOX 2835
+#define MEID_EDIT_DOCUMENT_END_EXTEND_BOX 2836
+#define MEID_EDIT_CANCEL_SELECTION 2837
+#define MEID_EDIT_DUPLICATE_LINE 2838
+#define MEID_VIEW_MODE_SELECT 2839
+#define MEID_TOOLS_IMPORT_SETTINGS 2840
+#define MEID_TOOLS_EXPORT_SETTINGS 2841
+#define MEID_TOOLS_RESET_SETTINGS 2842
+#define MEID_WINDOW_SCROLL_LINE_UP 2843
+#define MEID_WINDOW_SCROLL_LINE_DOWN 2844
+// 3.6.2
+#define MEID_EDIT_LOGICAL_LINE_START 2845
+#define MEID_EDIT_LOGICAL_LINE_END 2846
+#define MEID_EDIT_LOGICAL_LINE_START_EXTEND 2847
+#define MEID_EDIT_LOGICAL_LINE_END_EXTEND 2848
+// 3.7.1
+#define MEID_FILE_RECENT_CLOSED_FILE1 2849 // to MEID_FILE_RECENT_CLOSED_FILE1 + 255 (3104)
+#define MEID_FILE_OPEN_RECENT_CLOSED_FILE 3105
+// 3.7.2
+#define MEID_FILE_OPEN_IN_EXPLORER 3106
+#define MEID_FILE_COPY_PATH 3107
 
 #define MEID_DICTS 4096
 #define MEID_MODES 5120
 #define MEID_MACROS 6144
 #define MEID_PLUGINS 7168
 #define MEID_TOOLS 8192
+#define MEID_SUGGEST 9216
 
 typedef struct _GET_LINE_INFO
 {
@@ -646,6 +766,12 @@ typedef struct _TOOLBAR_INFO
 	BOOL bBreak;
 	int iWidth;
 } TOOLBAR_INFO;
+
+typedef struct tagSIZE_PTR
+{
+	int  cx;
+	int  cy;
+} SIZE_PTR, * PSIZE_PTR;
 
 typedef struct tagPOINT_PTR
 {
@@ -1714,4 +1840,63 @@ inline UINT_PTR Editor_GetMultiSel(HWND hwnd, int iSel, SEL_INFO* pSelInfo)
 inline UINT_PTR Editor_SetMultiSel(HWND hwnd, int iSel, const SEL_INFO* pSelInfo)
 {
 	return (UINT_PTR)SendMessage(hwnd, ME_SET_MULTI_SEL, (WPARAM)iSel, (LPARAM)pSelInfo);
+}
+
+// -----------------------------------------------------------------------------
+// Editor_GetDroppedText
+//   ドロップされた文字列を取得します
+// パラメータ
+//   hwnd:        ウィンドウのハンドル
+//   nBufferSize: 終端文字を含むバッファのサイズ
+//   szBuffer:    文字列を取得するバッファへのポインタ
+// 戻り値
+//   nBufferSizeが0の場合はバッファに必要なサイズ、0以外の場合は使用されません
+
+inline UINT Editor_GetDroppedText(HWND hwnd, UINT nBufferSize, LPWSTR szBuffer)
+{
+	return (UINT)SendMessage(hwnd, ME_GET_DROPPED_TEXT, (WPARAM)nBufferSize, (LPARAM)szBuffer);
+}
+
+// -----------------------------------------------------------------------------
+// Editor_GetPageSize
+//   1ページのサイズを取得します
+// パラメータ
+//   hwnd:      ウィンドウのハンドル
+//   psizePage: 1ページに表示できる桁数と行数を表す構造体へのポインタ
+// 戻り値
+//   使用されません
+
+inline void Editor_GetPageSize(HWND hwnd, SIZE_PTR* psizePage)
+{
+	SendMessage(hwnd, ME_GET_PAGE_SIZE, (WPARAM)0, (LPARAM)(SIZE_PTR*)(psizePage));
+}
+
+// -----------------------------------------------------------------------------
+// Editor_DevToView
+//   デバイス座標を表示座標に変換します
+// パラメータ
+//   hwnd:    ウィンドウのハンドル
+//   pptDev:  デバイス座標を指定した構造体へのポインタ
+//   pptView: 表示座標を指定した構造体へのポインタ
+// 戻り値
+//   使用されません
+
+inline void Editor_DevToView(HWND hwnd, POINT_PTR* pptDev, POINT_PTR* pptView)
+{
+	SendMessage(hwnd, ME_DEV_TO_VIEW, (WPARAM)(POINT_PTR*)(pptDev), (LPARAM)(POINT_PTR*)(pptView));
+}
+
+// -----------------------------------------------------------------------------
+// Editor_ViewToDev
+//   表示座標をデバイス座標に変換します
+// パラメータ
+//   hwnd:    ウィンドウのハンドル
+//   pptView: 表示座標を指定した構造体へのポインタ
+//   pptDev:  デバイス座標を指定した構造体へのポインタ
+// 戻り値
+//   使用されません
+
+inline void Editor_ViewToDev(HWND hwnd, POINT_PTR* pptView, POINT_PTR* pptDev)
+{
+	SendMessage(hwnd, ME_VIEW_TO_DEV, (WPARAM)(POINT_PTR*)(pptView), (LPARAM)(POINT_PTR*)(pptDev));
 }

@@ -1,3 +1,8 @@
+// -----------------------------------------------------------------------------
+// Copyright (c) Kuro. All rights reserved.
+// Licensed under the MIT License.
+// -----------------------------------------------------------------------------
+
 library ToolBar;
 
 {$R 'mPlugin.res' 'mPlugin.rc'}

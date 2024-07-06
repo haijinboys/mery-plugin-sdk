@@ -1,3 +1,8 @@
+// -----------------------------------------------------------------------------
+// Copyright (c) Kuro. All rights reserved.
+// Licensed under the MIT License.
+// -----------------------------------------------------------------------------
+
 library Basic;
 
 {$R 'mPlugin.res' 'mPlugin.rc'}

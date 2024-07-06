@@ -1,9 +1,6 @@
 // -----------------------------------------------------------------------------
-// プラグインフレーム
-//
-// Copyright (c) Kuro. All Rights Reserved.
-// e-mail: info@haijin-boys.com
-// www:    https://www.haijin-boys.com/
+// Copyright (c) Kuro. All rights reserved.
+// Licensed under the MIT License.
 // -----------------------------------------------------------------------------
 
 unit mFrame;

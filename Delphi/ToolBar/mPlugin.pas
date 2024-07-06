@@ -1,3 +1,8 @@
+// -----------------------------------------------------------------------------
+// Copyright (c) Kuro. All rights reserved.
+// Licensed under the MIT License.
+// -----------------------------------------------------------------------------
+
 unit mPlugin;
 
 interface
@@ -68,6 +73,8 @@ const
   COLOR_INDICATOR_SAVED = 55;
   // 3.0.0
   COLOR_MULTI_SELECTION = 56;
+  // 3.5.6
+  COLOR_INDENT_GUIDES = 57;
 
   // 2.5.0
   DWRITE_GAMMA = 256;
@@ -158,6 +165,9 @@ const
   EVENT_TOOL_BAR_CHANGED = $02000000;
   // 3.2.0
   EVENT_APP_MODE_CHANGED = $04000000;
+  // 3.4.0
+  EVENT_CUSTOM_BAR_DROP_TEXT = $08000000;
+  EVENT_TOOL_BAR_DROP_TEXT = $10000000;
 
   CLOSED_FRAME_WINDOW = 1;
   CLOSED_ANOTHER_CUSTOM_BAR = 2;
@@ -224,6 +234,12 @@ const
   ME_RUN_MACRO = ME_FIRST + 55;
   ME_GET_MULTI_SEL = ME_FIRST + 56;
   ME_SET_MULTI_SEL = ME_FIRST + 57;
+  // 3.4.0
+  ME_GET_DROPPED_TEXT = ME_FIRST + 58;
+  // 3.7.2
+  ME_GET_PAGE_SIZE = ME_FIRST + 59;
+  ME_DEV_TO_VIEW = ME_FIRST + 60;
+  ME_VIEW_TO_DEV = ME_FIRST + 61;
   ME_LAST = ME_FIRST + 255;
 
   MI_GET_FILE_NAME = 256;
@@ -279,6 +295,10 @@ const
   MI_GET_HALF_WIDTH_ENABLED = 297;
   // 3.3.2
   MI_GET_READ_ONLY = 298;
+  // 3.5.9
+  MI_GET_FONT_HEIGHT = 299;
+  // 3.7.0
+  MI_GET_USE_MICA = 300;
 
   RUN_FILE = 0;
   RUN_TEXT = 1;
@@ -301,16 +321,23 @@ const
   POS_VIEW = 0;
   POS_LOGICAL = 1;
   POS_DEV = 2;
+
   MAX_LINE_COLUMN_MODE = 4;
+
   SEL_TYPE_NONE = 0;
   SEL_TYPE_CHAR = 1;
   SEL_TYPE_BOX = 2;
+  // 3.0.0
+  SEL_TYPE_MULTI = 3;
+
   FLAG_MAKE_LOWER = 0;
   FLAG_MAKE_UPPER = 1;
   FLAG_HAN_TO_ZEN = 2;
   FLAG_ZEN_TO_HAN = 3;
   FLAG_CAPITALIZE = 4;
+
   FLAG_CONVERT_SELECT_ALL = $0100;
+
   FLAG_FIND_NEXT = $00000001;
   FLAG_REPLACE_ALL = $00000002;
   FLAG_FIND_OPEN_DOC = $00000004;
@@ -324,18 +351,27 @@ const
   FLAG_FIND_FILENAMES_ONLY = $00000400;
   FLAG_REPLACE_BACKUP = $00000800;
   FLAG_FIND_MIGEMO = $00001000;
+  // 3.5.0
+  FLAG_FIND_FUZZY = $00002000;
+  // 3.5.1
+  FLAG_FIND_SEL_ONLY = FLAG_REPLACE_SEL_ONLY;
+
   FLAG_LOGICAL = 1;
   FLAG_WITH_CRLF = 2;
   FLAG_GET_CRLF_BYTE = 4;
+
   FLAG_CR_ONLY = 1;
   FLAG_LF_ONLY = 2;
-  // 3.0.0
-  SEL_TYPE_MULTI = 3;
+
   // 3.3.6
   POS_SCROLL_DONT_CARE = $0000000;
   POS_SCROLL_CENTER = $0000010;
   POS_SCROLL_TOP = $0000020;
   POS_SCROLL_ALWAYS = $0000040;
+
+  // 3.5.5
+  MAX_MRU_FILE_COUNT = 256;
+  MAX_PINNED_FILE_COUNT = 256;
 
   MP_FIRST = WM_USER + $0500;
   MP_QUERY_PROPERTIES = MP_FIRST + 0;
@@ -587,12 +623,96 @@ const
   MEID_FILE_CLOSE_ALL_DESKTOP = 2266;
   MEID_WINDOW_NEW_GROUP_HORZ = 2267;
   MEID_WINDOW_NEW_GROUP_VERT = 2268;
+  // 3.4.1
+  MEID_MACROS_STOP = 2269;
+  MEID_WINDOW_MOVE_NEXT_GROUP = 2270;
+  MEID_WINDOW_MOVE_PREV_GROUP = 2271;
+  MEID_WINDOW_MOVE_NEXT = 2272;
+  MEID_WINDOW_MOVE_PREV = 2273;
+  // 3.5.4
+  MEID_VIEW_MARKERS_BAR_TEXT = 2274;
+  // 3.5.5
+  MEID_FILE_MRU_FILE1 = 2275; // to MEID_FILE_MRU_FILE1 + 255 (2530)
+  MEID_FILE_PINNED_FILE1 = 2531; // to MEID_FILE_PINNED_FILE1 + 255 (2786)
+  // 3.5.6
+  MEID_VIEW_SHOW_WRAP_LINE = 2787;
+  MEID_VIEW_SHOW_INDENT_GUIDES = 2788;
+  MEID_VIEW_SHOW_CARET_LINE = 2789;
+  MEID_VIEW_AUTO_INDENT = 2790;
+  MEID_VIEW_WRAP_INDENT = 2791;
+  // 3.5.9
+  MEID_EDIT_CREATE_GUID = 2792;
+  // 3.6.1
+  MEID_EDIT_DELETE_LEFT = 2793;
+  MEID_EDIT_CHAR_RIGHT = 2794;
+  MEID_EDIT_CHAR_LEFT = 2795;
+  MEID_EDIT_WORD_RIGHT = 2796;
+  MEID_EDIT_WORD_LEFT = 2797;
+  MEID_EDIT_LINE_UP = 2798;
+  MEID_EDIT_LINE_DOWN = 2799;
+  MEID_EDIT_PAGE_UP = 2800;
+  MEID_EDIT_PAGE_DOWN = 2801;
+  MEID_EDIT_LINE_START = 2802;
+  MEID_EDIT_TEXT_START = 2803;
+  MEID_EDIT_LINE_END = 2804;
+  MEID_EDIT_DOCUMENT_START = 2805;
+  MEID_EDIT_DOCUMENT_END = 2806;
+  MEID_EDIT_GO_TO_BRACKET = 2807;
+  MEID_EDIT_SELECT_CHAR = 2808;
+  MEID_EDIT_SELECT_BOX = 2809;
+  MEID_EDIT_CHAR_RIGHT_EXTEND = 2810;
+  MEID_EDIT_CHAR_LEFT_EXTEND = 2811;
+  MEID_EDIT_WORD_RIGHT_EXTEND = 2812;
+  MEID_EDIT_WORD_LEFT_EXTEND = 2813;
+  MEID_EDIT_LINE_UP_EXTEND = 2814;
+  MEID_EDIT_LINE_DOWN_EXTEND = 2815;
+  MEID_EDIT_PAGE_UP_EXTEND = 2816;
+  MEID_EDIT_PAGE_DOWN_EXTEND = 2817;
+  MEID_EDIT_LINE_START_EXTEND = 2818;
+  MEID_EDIT_TEXT_START_EXTEND = 2819;
+  MEID_EDIT_LINE_END_EXTEND = 2820;
+  MEID_EDIT_DOCUMENT_START_EXTEND = 2821;
+  MEID_EDIT_DOCUMENT_END_EXTEND = 2822;
+  MEID_EDIT_GO_TO_BRACKET_EXTEND = 2823;
+  MEID_EDIT_CHAR_RIGHT_EXTEND_BOX = 2824;
+  MEID_EDIT_CHAR_LEFT_EXTEND_BOX = 2825;
+  MEID_EDIT_WORD_RIGHT_EXTEND_BOX = 2826;
+  MEID_EDIT_WORD_LEFT_EXTEND_BOX = 2827;
+  MEID_EDIT_LINE_UP_EXTEND_BOX = 2828;
+  MEID_EDIT_LINE_DOWN_EXTEND_BOX = 2829;
+  MEID_EDIT_PAGE_UP_EXTEND_BOX = 2830;
+  MEID_EDIT_PAGE_DOWN_EXTEND_BOX = 2831;
+  MEID_EDIT_LINE_START_EXTEND_BOX = 2832;
+  MEID_EDIT_TEXT_START_EXTEND_BOX = 2833;
+  MEID_EDIT_LINE_END_EXTEND_BOX = 2834;
+  MEID_EDIT_DOCUMENT_START_EXTEND_BOX = 2835;
+  MEID_EDIT_DOCUMENT_END_EXTEND_BOX = 2836;
+  MEID_EDIT_CANCEL_SELECTION = 2837;
+  MEID_EDIT_DUPLICATE_LINE = 2838;
+  MEID_VIEW_MODE_SELECT = 2839;
+  MEID_TOOLS_IMPORT_SETTINGS = 2840;
+  MEID_TOOLS_EXPORT_SETTINGS = 2841;
+  MEID_TOOLS_RESET_SETTINGS = 2842;
+  MEID_WINDOW_SCROLL_LINE_UP = 2843;
+  MEID_WINDOW_SCROLL_LINE_DOWN = 2844;
+  // 3.6.2
+  MEID_EDIT_LOGICAL_LINE_START = 2845;
+  MEID_EDIT_LOGICAL_LINE_END = 2846;
+  MEID_EDIT_LOGICAL_LINE_START_EXTEND = 2847;
+  MEID_EDIT_LOGICAL_LINE_END_EXTEND = 2848;
+  // 3.7.1
+  MEID_FILE_RECENT_CLOSED_FILE1 = 2849; // to MEID_FILE_RECENT_CLOSED_FILE1 + 255 (3104)
+  MEID_FILE_OPEN_RECENT_CLOSED_FILE = 3105;
+  // 3.7.2
+  MEID_FILE_OPEN_IN_EXPLORER = 3106;
+  MEID_FILE_COPY_PATH = 3107;
 
   MEID_DICTS = 4096;
   MEID_MODES = 5120;
   MEID_MACROS = 6144;
   MEID_PLUGINS = 7168;
   MEID_TOOLS = 8192;
+  MEID_SUGGEST = 9216;
 
 type
   TGetLineInfo = record
@@ -752,6 +872,10 @@ procedure Editor_EndUndoGroup(hwnd: THandle);
 function Editor_RunMacro(hwnd: THandle; nFlags: Cardinal; nDefMacroLang: Cardinal; pszMacroFile: PChar; pszText: PChar; pptErrorPos: PPoint): HRESULT;
 function Editor_GetMultiSel(hwnd: THandle; iSel: Integer; pSelInfo: PSelInfo): Integer;
 function Editor_SetMultiSel(hwnd: THandle; iSel: Integer; const pSelInfo: PSelInfo): Boolean;
+function Editor_GetDroppedText(hwnd: THandle; nBufferSize: Cardinal; szBuffer: PChar): Cardinal;
+procedure Editor_GetPageSize(hwnd: THandle; psizePage: PSize);
+procedure Editor_DevToView(hwnd: THandle; pptDev, pptView: PPoint);
+procedure Editor_ViewToDev(hwnd: THandle; pptView, pptDev: PPoint);
 
 implementation
 
@@ -1528,7 +1652,7 @@ end;
 
 function Editor_GetStatus(hwnd: THandle; szStatus: PChar; nBufferSize: Cardinal): Cardinal;
 begin
-  Result := Cardinal(SendMessage(hwnd, ME_GET_STATUS, WPARAM(nBufferSize), LPARAM(nBufferSize)));
+  Result := Cardinal(SendMessage(hwnd, ME_GET_STATUS, WPARAM(nBufferSize), LPARAM(szStatus)));
 end;
 
 // -----------------------------------------------------------------------------
@@ -1776,7 +1900,7 @@ end;
 //   iSel:     選択範囲のインデックス
 //   pSelInfo: TSelInfo へのポインタ
 // 戻り値
-//   iSel に -1 を指定した場合は選択範囲の数、それ以外の場合は選択範囲に関する情報と True、複数選択でない場合やエラーが発生した場合は False を返します
+//   iSelに-1を指定した場合は選択範囲の数、それ以外の場合は選択範囲に関する情報とTrue、複数選択でない場合やエラーが発生した場合はFalseを返します
 
 function Editor_GetMultiSel(hwnd: THandle; iSel: Integer; pSelInfo: PSelInfo): Integer;
 begin
@@ -1791,11 +1915,70 @@ end;
 //   iSel:     選択範囲のインデックス
 //   pSelInfo: TSelInfo へのポインタ
 // 戻り値
-//   選択範囲に関する情報を設定した場合は True、複数選択でない場合やエラーが発生した場合は False を返します
+//   選択範囲に関する情報を設定した場合はTrue、複数選択でない場合やエラーが発生した場合はFalseを返します
 
 function Editor_SetMultiSel(hwnd: THandle; iSel: Integer; const pSelInfo: PSelInfo): Boolean;
 begin
   Result := Boolean(SendMessage(hwnd, ME_SET_MULTI_SEL, WPARAM(iSel), LPARAM(pSelInfo)));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_GetDroppedText
+//   ドロップされた文字列を取得します
+// パラメータ
+//   hwnd:        ウィンドウのハンドル
+//   nBufferSize: 終端文字を含むバッファのサイズ
+//   szBuffer:    文字列を取得するバッファへのポインタ
+// 戻り値
+//   nBufferSizeが0の場合はバッファに必要なサイズ、0以外の場合は使用されません
+
+function Editor_GetDroppedText(hwnd: THandle; nBufferSize: Cardinal; szBuffer: PChar): Cardinal;
+begin
+  Result := Cardinal(SendMessage(hwnd, ME_GET_DROPPED_TEXT, WPARAM(nBufferSize), LPARAM(szBuffer)));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_GetPageSize
+//   1ページのサイズを取得します
+// パラメータ
+//   hwnd:      ウィンドウのハンドル
+//   psizePage: 1ページに表示できる桁数と行数を表す構造体へのポインタ
+// 戻り値
+//   使用されません
+
+procedure Editor_GetPageSize(hwnd: THandle; psizePage: PSize);
+begin
+  SendMessage(hwnd, ME_GET_PAGE_SIZE, WPARAM(0), LPARAM(psizePage));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_DevToView
+//   デバイス座標を表示座標に変換します
+// パラメータ
+//   hwnd:    ウィンドウのハンドル
+//   pptDev:  デバイス座標を指定した構造体へのポインタ
+//   pptView: 表示座標を指定した構造体へのポインタ
+// 戻り値
+//   使用されません
+
+procedure Editor_DevToView(hwnd: THandle; pptDev, pptView: PPoint);
+begin
+  SendMessage(hwnd, ME_DEV_TO_VIEW, WPARAM(pptDev), LPARAM(pptView));
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_ViewToDev
+//   表示座標をデバイス座標に変換します
+// パラメータ
+//   hwnd:    ウィンドウのハンドル
+//   pptView: 表示座標を指定した構造体へのポインタ
+//   pptDev:  デバイス座標を指定した構造体へのポインタ
+// 戻り値
+//   使用されません
+
+procedure Editor_ViewToDev(hwnd: THandle; pptView, pptDev: PPoint);
+begin
+  SendMessage(hwnd, ME_VIEW_TO_DEV, WPARAM(pptView), LPARAM(pptDev));
 end;
 
 end.
