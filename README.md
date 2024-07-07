@@ -8,12 +8,15 @@ Mery のプラグインを開発するためのソフトウェア開発キット
 - Microsoft Visual C++ 2008
 - Microsoft Visual C++ 2010
 - Microsoft Visual C++ 2013
+- Microsoft Visual C++ 2019
+- Microsoft Visual C++ 2022
 - Delphi XE2
 - Delphi 10 Seattle
 - Delphi 10.1 Berlin
 - Delphi 10.2 Tokyo
 - Delphi 10.3 Rio
 - Delphi 10.4 Sydney
+- Delphi 11.3 Alexandria
 
 **アーカイブに含まれるファイル**
 - C/Basic: 基本的なサンプル
