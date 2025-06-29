@@ -17,6 +17,7 @@ Mery のプラグインを開発するためのソフトウェア開発キット
 - Delphi 10.3 Rio
 - Delphi 10.4 Sydney
 - Delphi 11.3 Alexandria
+- Delphi 12 Athens
 
 **アーカイブに含まれるファイル**
 - C/Basic: 基本的なサンプル

@@ -69,6 +69,8 @@
 #define COLOR_MULTI_SELECTION 56
 // 3.5.6
 #define COLOR_INDENT_GUIDES 57
+// 3.7.13
+#define COLOR_COLOR_STRING 58
 
 // 2.5.0
 #define DWRITE_GAMMA 256
@@ -94,6 +96,7 @@
 #define ENCODING_ARABIC 1256
 #define ENCODING_BALTIC 1257
 #define ENCODING_CENTRALEUROPEAN 1250
+#define ENCODING_GB18030 54936
 #define ENCODING_CHINESESIMPLIFIED 936
 #define ENCODING_CHINESETRADITIONAL 950
 #define ENCODING_CYRILLIC 1251
@@ -234,6 +237,10 @@
 #define ME_GET_PAGE_SIZE (ME_FIRST + 59)
 #define ME_DEV_TO_VIEW (ME_FIRST + 60)
 #define ME_VIEW_TO_DEV (ME_FIRST + 61)
+// 3.7.7
+#define ME_GET_ATTR (ME_FIRST + 62)
+// 3.7.14
+#define ME_SHOW_TIP (ME_FIRST + 63)
 #define ME_LAST (ME_FIRST + 255)
 
 #define MI_GET_FILE_NAME 256
@@ -293,6 +300,13 @@
 #define MI_GET_FONT_HEIGHT 299
 // 3.7.0
 #define MI_GET_USE_MICA 300
+// 3.7.7
+#define MI_GET_NEXT_BOOKMARK 301
+#define MI_GET_PREV_BOOKMARK 302
+#define MI_GET_BOOKMARK_COUNT 303
+#define MI_ADD_BOOKMARK 304
+#define MI_REMOVE_BOOKMARK 305
+#define MI_CLEAR_BOOKMARK 306
 
 #define RUN_FILE 0
 #define RUN_TEXT 1
@@ -300,7 +314,11 @@
 #define MACRO_LANG_JSCRIPT 0
 #define MACRO_LANG_VBSCRIPT 1
 #define MACRO_LANG_CHAKRA 2
-#define MACRO_LANG_UNKNOWN $FF
+// 3.7.13
+#define MACRO_LANG_V8 3
+#define MACRO_LANG_UNKNOWN 0xFF
+// 3.7.13
+#define MACRO_ASYNC 0x200
 
 #define OVERWRITE_PER_PROP 0
 #define OVERWRITE_INSERT 1
@@ -349,6 +367,11 @@
 #define FLAG_FIND_FUZZY 0x00002000
 // 3.5.1
 #define FLAG_FIND_SEL_ONLY FLAG_REPLACE_SEL_ONLY
+// 3.7.4
+#define FLAG_FIND_ALL 0x00004000
+#define FLAG_FIND_NOT_BOL 0x00008000
+#define FLAG_FIND_NOT_EOL 0x00010000
+#define FLAG_FIND_KEEP_OPTIONS 0x00020000
 
 #define FLAG_LOGICAL 1
 #define FLAG_WITH_CRLF 2
@@ -366,6 +389,23 @@
 // 3.5.5
 #define MAX_MRU_FILE_COUNT 256
 #define MAX_PINNED_FILE_COUNT 256
+
+// 3.7.7
+#define ATTR_NONE 0x00
+#define ATTR_COMMENT 0x10
+#define ATTR_DOUBLE_QUOTE 0x20
+#define ATTR_SINGLE_QUOTE 0x40
+#define ATTR_TAG 0x80
+
+#define AI_NEED_CONFIG_SCOPE 0x01
+#define AI_NEED_CONFIG_DOC 0x02
+#define AI_NEED_ATTR_SUB 0x04
+#define AI_NEED_ALL 0x07
+
+// 3.7.14
+#define SHOW_TIP_POS_CARET 0
+#define SHOW_TIP_POS_MOUSE 1
+#define SHOW_TIP_HIDE 2
 
 #define MP_FIRST (WM_USER + 0x0500)
 #define MP_QUERY_PROPERTIES (MP_FIRST + 0)
@@ -700,6 +740,18 @@
 // 3.7.2
 #define MEID_FILE_OPEN_IN_EXPLORER 3106
 #define MEID_FILE_COPY_PATH 3107
+// 3.7.3
+#define MEID_VIEW_LINE_NUMBERS_ABSOLUTE 3108
+#define MEID_VIEW_LINE_NUMBERS_RELATIVE 3109
+#define MEID_VIEW_LINE_NUMBERS_INTERVAL 3110
+#define MEID_VIEW_LINE_NUMBERS_LOGICAL 3111
+#define MEID_VIEW_SHOW_LINE_NUMBERS_LINE 3112
+// 3.7.14
+#define MEID_FILE_RELOAD_GB18030 3113
+#define MEID_EDIT_SELECT_LINE 3114
+#define MEID_EDIT_SELECT_WORD 3115
+// 3.7.16
+#define MEID_FILE_RELOAD 3116
 
 #define MEID_DICTS 4096
 #define MEID_MODES 5120
@@ -761,9 +813,9 @@ typedef struct _TOOLBAR_INFO
 	LPCTSTR pszTitle;
 	UINT nID;
 	UINT nFlags;
-	BOOL bVisible;
+	BYTE bVisible;
 	int iIndex;
-	BOOL bBreak;
+	BYTE bBreak;
 	int iWidth;
 } TOOLBAR_INFO;
 
@@ -793,6 +845,21 @@ typedef struct _SEL_INFO {
 	POINT_PTR ptStart;
 	POINT_PTR ptEnd;
 } SEL_INFO;
+
+typedef struct _ATTR_INFO {
+	UINT cbSize;
+	POINT_PTR ptLogical;
+	UINT nFlags;
+	UINT nAttr;
+	WCHAR szConfigScope[MAX_MODE_NAME];
+	WCHAR szConfigDoc[MAX_MODE_NAME];
+} ATTR_INFO;
+
+typedef struct _TIP_INFO {
+	UINT cbSize;
+	LPCWSTR pszTip;
+	UINT nFlags;
+} TIP_INFO;
 
 // -----------------------------------------------------------------------------
 // Editor_New
@@ -1818,7 +1885,7 @@ inline HRESULT Editor_RunMacro(HWND hwnd, UINT nFlags, UINT nDefMacroLang, LPCWS
 // パラメータ
 //   hwnd:     ウィンドウのハンドル
 //   iSel:     選択範囲のインデックス
-//   pSelInfo: TSelInfo へのポインタ
+//   pSelInfo: SEL_INFO構造体へのポインタ
 // 戻り値
 //   iSel に -1 を指定した場合は選択範囲の数、それ以外の場合は選択範囲に関する情報と True、複数選択でない場合やエラーが発生した場合は False を返します
 
@@ -1833,7 +1900,7 @@ inline UINT_PTR Editor_GetMultiSel(HWND hwnd, int iSel, SEL_INFO* pSelInfo)
 // パラメータ
 //   hwnd:     ウィンドウのハンドル
 //   iSel:     選択範囲のインデックス
-//   pSelInfo: TSelInfo へのポインタ
+//   pSelInfo: SEL_INFO構造体へのポインタ
 // 戻り値
 //   選択範囲に関する情報を設定した場合は True、複数選択でない場合やエラーが発生した場合は False を返します
 
@@ -1899,4 +1966,32 @@ inline void Editor_DevToView(HWND hwnd, POINT_PTR* pptDev, POINT_PTR* pptView)
 inline void Editor_ViewToDev(HWND hwnd, POINT_PTR* pptView, POINT_PTR* pptDev)
 {
 	SendMessage(hwnd, ME_VIEW_TO_DEV, (WPARAM)(POINT_PTR*)(pptView), (LPARAM)(POINT_PTR*)(pptDev));
+}
+
+// -----------------------------------------------------------------------------
+// Editor_GetAttr
+//   指定した位置の属性を取得します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+//   pAI:  ATTR_INFO構造体へのポインタ
+// 戻り値
+//   成功するとTrueを返します
+
+inline BOOL Editor_GetAttr(HWND hwnd, ATTR_INFO* pAI)
+{
+	return (BOOL)SendMessage(hwnd, ME_GET_ATTR, (WPARAM)0, (LPARAM)pAI);
+}
+
+// -----------------------------------------------------------------------------
+// Editor_ShowTip
+//   ツールチップを表示します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+//   pTI:  TIP_INFO構造体へのポインタ
+// 戻り値
+//   使用されません
+
+inline BOOL Editor_ShowTip(HWND hwnd, TIP_INFO* pTI)
+{
+	SendMessage(hwnd, ME_SHOW_TIP, (WPARAM)0, (LPARAM)pTI);
 }
