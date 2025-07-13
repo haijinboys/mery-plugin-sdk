@@ -17,16 +17,18 @@ Mery のプラグインを開発するためのソフトウェア開発キット
 - Delphi 10.3 Rio
 - Delphi 10.4 Sydney
 - Delphi 11.3 Alexandria
-- Delphi 12 Athens
+- Delphi 12.1 Athens
 
 **アーカイブに含まれるファイル**
 - C/Basic: 基本的なサンプル
 - Delphi/Basic: 基本的なサンプル
-- Delphi/CustomBar: カスタムバーを使用したサンプル
-- Delphi/ToolBar: ツールバーを使用したサンプル
-- CHANGELOG.txt: 変更ログ
-- README.txt: 本ドキュメント
+- Delphi/CustomBar: カスタム バーを使用したサンプル
+- Delphi/Outline: アウトライン プラグインのサンプル (Delphi 12)
+- Delphi/ToolBar: ツール バーを使用したサンプル
+- CHANGELOG.md: 変更ログ
+- README.md: 本ドキュメント
+- LICENSE: ライセンス
 
 ## ライセンス
 
-ソースコードは MIT ライセンスです。
+著作権およびライセンスについては、同梱されている `LICENSE` ファイルに詳細が記載されています。

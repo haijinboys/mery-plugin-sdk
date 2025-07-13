@@ -1,0 +1,14 @@
+#define IDS_MENU_TEXT 1
+#define IDS_STATUS_MESSAGE 2
+#define IDI_ICON 101
+#define IDI_ICON_DARK 201
+
+IDI_ICON ICON "Outline_Icon.ico"
+IDI_ICON_DARK ICON "Outline_IconDark.ico"
+
+STRINGTABLE
+LANGUAGE LANG_JAPANESE, 0x1
+{
+	IDS_MENU_TEXT, "アウトライン"
+	IDS_STATUS_MESSAGE, "アウトライン|アウトラインを表示します。"
+}
