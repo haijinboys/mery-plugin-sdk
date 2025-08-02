@@ -358,7 +358,7 @@ const
 
   FLAG_FIND_NEXT = $00000001;
   FLAG_REPLACE_ALL = $00000002;
-  FLAG_FIND_OPEN_DOC = $00000004;
+  FLAG_FIND_OPEN_DOC = $00000004; // Reserved for future use
   FLAG_FIND_MATCH_CASE = $00000008;
   FLAG_FIND_RECURSIVE = $00000010;
   FLAG_FIND_REG_EX = $00000020;
@@ -995,9 +995,9 @@ implementation
 
 // -----------------------------------------------------------------------------
 // Editor_New
-//   新規にファイルを作成します
+//   文書を新規作成します
 // パラメータ
-//   hwnd:      ウィンドウのハンドル
+//   hwnd: ウィンドウのハンドル
 // 戻り値
 //   ウィンドウのハンドル
 
@@ -1013,7 +1013,7 @@ end;
 //   hwnd:      ウィンドウのハンドル
 //   hInstance: プラグインのインスタンスのハンドル
 // 戻り値
-//   プラグインを実行するためのコマンドID
+//   プラグインを実行するためのコマンドIDを返します
 
 function Editor_GetCmdID(hwnd: THandle; hInstance: THandle): Cardinal;
 begin
@@ -1022,10 +1022,10 @@ end;
 
 // -----------------------------------------------------------------------------
 // Editor_QueryStatus
-//   プラグインが実行可能か、またはチェックされた状態かを調べます
+//   コマンドが実行可能か、またはチェックされた状態かを取得します
 // パラメータ
 //   hwnd:      ウィンドウのハンドル
-//   nCmdID:    実行するプラグインのコマンドID
+//   nCmdID:    コマンドID
 //   pbChecked: チェックの状態
 // 戻り値
 //   実行可能であればTrueを返します
@@ -1133,8 +1133,8 @@ end;
 // Editor_GetScrollPos
 //   スクロールバーの位置を取得します
 // パラメータ
-//   hwnd:     ウィンドウのハンドル
-//   pptPos:   スクロールバーの位置を格納するための構造体へのポインタ
+//   hwnd:   ウィンドウのハンドル
+//   pptPos: スクロールバーの位置を格納するための構造体へのポインタ
 // 戻り値
 //   使用されません
 
@@ -1285,10 +1285,10 @@ end;
 // Editor_SetCaretPosEx
 //   カーソル位置を設定します
 // パラメータ
-//   hwnd:      ウィンドウのハンドル
-//   nLogical:  POS_VIEW(表示座標)またはPOS_LOGICAL(論理座標)
-//   pptPos:    カーソル位置を指定した構造体へのポインタ
-//   bExtend:   選択範囲を伸縮するかどうか
+//   hwnd:     ウィンドウのハンドル
+//   nLogical: POS_VIEW(表示座標)またはPOS_LOGICAL(論理座標)
+//   pptPos:   カーソル位置を指定した構造体へのポインタ
+//   bExtend:  選択範囲を伸縮するかどうか
 // 戻り値
 //   使用されません
 
@@ -1316,7 +1316,7 @@ end;
 // Editor_ViewToLogical
 //   表示座標を論理座標に変換します
 // パラメータ
-//   hwnd:   ウィンドウのハンドル
+//   hwnd:       ウィンドウのハンドル
 //   pptView:    表示座標を指定した構造体へのポインタ
 //   pptLogical: 論理座標を指定した構造体へのポインタ
 // 戻り値
@@ -1331,8 +1331,8 @@ end;
 // Editor_ExecCommand
 //   指定するコマンドIDを実行します
 // パラメータ
-//   hwnd:    ウィンドウのハンドル
-//   pptView: 実行するコマンドID
+//   hwnd:   ウィンドウのハンドル
+//   nCmdID: 実行するコマンドID
 // 戻り値
 //   使用されません
 
@@ -1564,11 +1564,18 @@ end;
 // 戻り値
 //   成功するとTrueを返します
 // 備考
-//   FLAG_FIND_NEXT:      下方向に検索します
-//   FLAG_FIND_CASE:      大文字と小文字を区別します
-//   FLAG_FIND_ONLY_WORD: 単語のみ検索します
-//   FLAG_FIND_AROUND:    文末まで検索したら文頭に移動します
-//   FLAG_FIND_REG_EXP:   正規表現を使用します
+//   FLAG_FIND_NEXT:         次を検索します
+//   FLAG_FIND_MATCH_CASE:   大文字と小文字を区別します
+//   FLAG_FIND_REG_EX:       正規表現を使用します
+//   FLAG_FIND_WHOLE_WORD:   単語のみ検索します
+//   FLAG_FIND_AROUND:       文末まで検索したら文頭に移動します
+//   FLAG_FIND_MIGEMO:       ローマ字検索を使用します
+//   FLAG_FIND_FUZZY:        あいまい検索を使用します
+//   FLAG_FIND_SEL_ONLY:     選択した範囲のみ検索します
+//   FLAG_FIND_ALL:          すべて検索します
+//   FLAG_FIND_NOT_BOL:      選択範囲の先頭を行頭とみなしません
+//   FLAG_FIND_NOT_EOL:      選択範囲の終端を行末とみなしません
+//   FLAG_FIND_KEEP_OPTIONS: 検索オプションを維持します
 
 function Editor_Find(hwnd: THandle; nFlags: Cardinal; szFind: PChar): Boolean;
 begin
@@ -1585,10 +1592,17 @@ end;
 // 戻り値
 //   成功するとTrueを返します
 // 備考
-//   FLAG_FIND_CASE:        大文字と小文字を区別します
-//   FLAG_FIND_ONLY_WORD:   単語のみ検索します
-//   FLAG_FIND_REG_EXP:     正規表現を使用します
-//   FLAG_REPLACE_SEL_ONLY: 選択した範囲のみを対象とします
+//   FLAG_FIND_MATCH_CASE:   大文字と小文字を区別します
+//   FLAG_FIND_REG_EX:       正規表現を使用します
+//   FLAG_FIND_WHOLE_WORD:   単語のみ検索します
+//   FLAG_FIND_AROUND:       文末まで検索したら文頭に移動します
+//   FLAG_FIND_MIGEMO:       ローマ字検索を使用します
+//   FLAG_FIND_FUZZY:        あいまい検索を使用します
+//   FLAG_FIND_SEL_ONLY:     選択した範囲のみ検索します
+//   FLAG_REPLACE_ALL:       すべて置換します
+//   FLAG_FIND_NOT_BOL:      選択範囲の先頭を行頭とみなしません
+//   FLAG_FIND_NOT_EOL:      選択範囲の終端を行末とみなしません
+//   FLAG_FIND_KEEP_OPTIONS: 検索オプションを維持します
 
 function Editor_Replace(hwnd: THandle; nFlags: Cardinal;
   szFindReplace: PChar): Boolean;
@@ -1623,7 +1637,8 @@ end;
 //   FLAG_MAKE_UPPER:         大文字に変換します
 //   FLAG_HAN_TO_ZEN:         全角に変換します
 //   FLAG_ZEN_TO_HAN:         半角に変換します
-//   FLAG_CONVERT_SELECT_ALL: 文書全体を対象とします
+//   FLAG_CAPITALIZE:         単語の最初の文字を大文字に変換します
+//   FLAG_CONVERT_SELECT_ALL: すべて選択して変換します
 
 function Editor_Convert(hwnd: THandle; nFlags: Cardinal): Boolean;
 begin
@@ -1676,9 +1691,10 @@ end;
 // パラメータ
 //   hwnd: ウィンドウのハンドル
 // 戻り値
-//   SEL_TYPE_NONE: 選択されていません
-//   SEL_TYPE_CHAR: 通常選択されています
-//   SEL_TYPE_BOX:  矩形選択されています
+//   SEL_TYPE_NONE:  選択されていません
+//   SEL_TYPE_CHAR:  通常選択されています
+//   SEL_TYPE_BOX:   矩形選択されています
+//   SEL_TYPE_MULTI: 複数選択されています
 
 function Editor_GetSelType(hwnd: THandle): Integer;
 begin
@@ -1701,31 +1717,69 @@ end;
 
 // -----------------------------------------------------------------------------
 // Editor_Info
-//   文書の情報を取得・設定します
+//   文書の情報を取得/設定します
 // パラメータ
 //   hwnd: ウィンドウのハンドル
-//   nCmd: 取得・設定する情報の種類
+//   nCmd: 取得/設定する情報の種類
 // 戻り値
 //   nCmdにより異なります
 // 備考
-//   MI_GET_FILE_NAME:      開いているファイル名を取得します
-//   MI_GET_APP_VERSION:    バージョンを取得します
-//   MI_IS_WINDOW_COMBINED: タブの有効・無効を取得します
-//   MI_WINDOW_COMBINE:     タブの有効・無効を設定します
-//   MI_GET_DOC_COUNT:      開いている文書の数を取得します
-//   MI_INDEX_TO_DOC:       文書のインデックスからハンドルに変換します
-//   MI_DOC_TO_INDEX:       文書のハンドルからインデックスに変換します
-//   MI_GET_ACTIVE_INDEX:   アクティブな文書のインデックスを取得します
-//   MI_SET_ACTIVE_INDEX:   インデックスを指定して文書をアクティブにします
-//   MI_GET_ACTIVE_DOC:     アクティブな文書のハンドルを取得します
-//   MI_SET_ACTIVE_DOC:     ハンドルを指定して文書をアクティブにします
-//   MI_CLOSE_DOC:          文書を閉じます
-//   MI_SAVE_DOC:           文書を保存します
-//   MI_GET_FONT_NAME:      フォント名を取得します
-//   MI_GET_FONT_CHARSET:   フォントの文字セットを取得します
-//   MI_GET_FONT_SIZE:      フォントのサイズを取得します
-//   MI_GET_TEXT_COLOR:     文字の色を取得します
-//   MI_GET_BACK_COLOR:     背景の色を取得します
+//   MI_GET_FILE_NAME:                開いているファイル名を取得します
+//   MI_GET_APP_VERSION:              バージョンを取得します
+//   MI_IS_WINDOW_COMBINED:           タブの有効/無効を取得します
+//   MI_WINDOW_COMBINE:               タブの有効/無効を設定します
+//   MI_GET_DOC_COUNT:                開いている文書の数を取得します
+//   MI_INDEX_TO_DOC:                 文書のインデックスからハンドルに変換します
+//   MI_DOC_TO_INDEX:                 文書のハンドルからインデックスに変換します
+//   MI_GET_ACTIVE_INDEX:             アクティブな文書のインデックスを取得します
+//   MI_SET_ACTIVE_INDEX:             インデックスを指定して文書をアクティブにします
+//   MI_GET_ACTIVE_DOC:               アクティブな文書のハンドルを取得します
+//   MI_SET_ACTIVE_DOC:               ハンドルを指定して文書をアクティブにします
+//   MI_CLOSE_DOC:                    文書を閉じます
+//   MI_SAVE_DOC:                     文書を保存します
+//   MI_GET_FONT_NAME:                フォント名を取得します
+//   MI_GET_FONT_CHARSET:             フォントの文字セットを取得します
+//   MI_GET_FONT_SIZE:                フォントのサイズを取得します
+//   MI_GET_TEXT_COLOR:               文字の色を取得します
+//   MI_GET_BACK_COLOR:               背景の色を取得します
+//   MI_GET_INVERT_COLOR:             色の反転の有効/無効を取得します
+//   MI_GET_DWRITE_ENABLED:           DirectWriteの有効/無効を取得します
+//   MI_GET_DWRITE_RENDERING_PARAMS:  DirectWriteのレンダリングパラメーターを取得します
+//     DWRITE_GAMMA:                  ガンマ
+//     DWRITE_ENHANCED_CONTRAST:      コントラスト
+//     DWRITE_CLEAR_TYPE_LEVEL:       ClearTypeレベル
+//     DWRITE_RENDERING_MODE:         レンダリングモード
+//     DWRITE_TEXT_ANTIALIAS_MODE:    アンチエイリアスモード
+//   MI_GET_COLOR_FONT_ENABLED:       カラーフォントの有効/無効を取得します
+//   MI_GET_GDI_COMPATIBLE:           GDI互換モードの有効/無効を取得します
+//   MI_GET_VERTICAL:                 縦書きの有効/無効を取得します
+//   MI_GET_ENCODING:                 エンコードを取得します
+//   MI_SET_ENCODING:                 エンコードを設定します
+//   MI_GET_LINE_ENDING:              改行コードを取得します
+//   MI_SET_LINE_ENDING:              改行コードを設定します
+//   MI_GET_INDENT_STYLE:             インデントスタイルを取得します
+//   MI_SET_INDENT_STYLE:             インデントスタイルを設定します
+//   MI_GET_INDENT_SIZE:              インデントサイズを取得します
+//   MI_SET_INDENT_SIZE:              インデントサイズを設定します
+//   MI_GET_TRIM_TRAILING_WHITESPACE: 保存する前に改行文字の前にある空白文字を削除するかどうかを取得します
+//   MI_SET_TRIM_TRAILING_WHITESPACE: 保存する前に改行文字の前にある空白文字を削除するかどうかを設定します
+//   MI_GET_INSERT_FINAL_NEWLINE:     保存する前にファイルが改行で終了するようにするかどうかを取得します
+//   MI_SET_INSERT_FINAL_NEWLINE:     保存する前にファイルが改行で終了するようにするかどうかを設定します
+//   MI_GET_DWRITE_AUTODETECT:        DirectWriteの自動設定の有効/無効を取得します
+//   MI_GET_MAX_LINE_LENGTH:          行の折り返し文字数を取得します
+//   MI_SET_MAX_LINE_LENGTH:          行の折り返し文字数を設定します
+//   MI_GET_DARK_MODE:                ダークモードの有効/無効を取得します
+//   MI_GET_LIGATURES_ENABLED:        DirectWriteの合字の有効/無効を取得します
+//   MI_GET_HALF_WIDTH_ENABLED:       DirectWriteの等幅半角字形の有効/無効を取得します
+//   MI_GET_READ_ONLY:                書き換え禁止の有効/無効を取得します
+//   MI_GET_FONT_HEIGHT:              フォントの高さを取得します
+//   MI_GET_USE_MICA:                 マイカの有効/無効を取得します
+//   MI_GET_NEXT_BOOKMARK:            次のブックマーク位置を取得します
+//   MI_GET_PREV_BOOKMARK:            前のブックマーク位置を取得します
+//   MI_GET_BOOKMARK_COUNT:           ブックマークの数を取得します
+//   MI_ADD_BOOKMARK:                 指定した行にブックマークを設定します
+//   MI_REMOVE_BOOKMARK:              指定した行のブックマークを解除します
+//   MI_CLEAR_BOOKMARK:               すべてのブックマークを解除します
 
 function Editor_Info(hwnd: THandle; nCmd: WPARAM; lParam: LPARAM): LRESULT;
 begin
@@ -1734,32 +1788,13 @@ end;
 
 // -----------------------------------------------------------------------------
 // Editor_DocInfo
-//   指定する文書の情報を取得・設定します
+//   指定する文書の情報を取得/設定します
 // パラメータ
 //   hwnd: ウィンドウのハンドル
 //   iDoc: 0を基底とする文書のインデックス
-//   nCmd: 取得・設定する情報の種類
+//   nCmd: 取得/設定する情報の種類
 // 戻り値
 //   nCmdにより異なります
-// 備考
-//   MI_GET_FILE_NAME:      開いているファイル名を取得します
-//   MI_GET_APP_VERSION:    バージョンを取得します
-//   MI_IS_WINDOW_COMBINED: タブの有効・無効を取得します
-//   MI_WINDOW_COMBINE:     タブの有効・無効を設定します
-//   MI_GET_DOC_COUNT:      開いている文書の数を取得します
-//   MI_INDEX_TO_DOC:       文書のインデックスからハンドルに変換します
-//   MI_DOC_TO_INDEX:       文書のハンドルからインデックスに変換します
-//   MI_GET_ACTIVE_INDEX:   アクティブな文書のインデックスを取得します
-//   MI_SET_ACTIVE_INDEX:   インデックスを指定して文書をアクティブにします
-//   MI_GET_ACTIVE_DOC:     アクティブな文書のハンドルを取得します
-//   MI_SET_ACTIVE_DOC:     ハンドルを指定して文書をアクティブにします
-//   MI_CLOSE_DOC:          文書を閉じます
-//   MI_SAVE_DOC:           文書を保存します
-//   MI_GET_FONT_NAME:      フォント名を取得します
-//   MI_GET_FONT_CHARSET:   フォントの文字セットを取得します
-//   MI_GET_FONT_SIZE:      フォントのサイズを取得します
-//   MI_GET_TEXT_COLOR:     文字の色を取得します
-//   MI_GET_BACK_COLOR:     背景の色を取得します
 
 function Editor_DocInfo(hwnd: THandle; iDoc: Integer; nCmd: WPARAM;
   lParam: LPARAM): LRESULT;
