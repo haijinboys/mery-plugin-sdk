@@ -241,6 +241,9 @@
 #define ME_GET_ATTR (ME_FIRST + 62)
 // 3.7.14
 #define ME_SHOW_TIP (ME_FIRST + 63)
+// 3.7.18
+#define ME_FIND_IN_FILES (ME_FIRST + 64)
+#define ME_REPLACE_IN_FILES (ME_FIRST + 65)
 #define ME_LAST (ME_FIRST + 255)
 
 #define MI_GET_FILE_NAME 256
@@ -352,7 +355,7 @@
 
 #define FLAG_FIND_NEXT 0x00000001
 #define FLAG_REPLACE_ALL 0x00000002
-#define FLAG_FIND_OPEN_DOC 0x00000004
+#define FLAG_FIND_OPEN_DOC 0x00000004 // Reserved for future use
 #define FLAG_FIND_MATCH_CASE 0x00000008
 #define FLAG_FIND_RECURSIVE 0x00000010
 #define FLAG_FIND_REG_EX 0x00000020
@@ -860,6 +863,15 @@ typedef struct _TIP_INFO {
 	LPCWSTR pszTip;
 	UINT nFlags;
 } TIP_INFO;
+
+typedef struct _GREP_INFO {
+	UINT cbSize;
+	UINT nCP;
+	UINT nFlags;
+	LPCWSTR pszFind;
+	LPCWSTR pszReplace;
+	LPCWSTR pszPath;
+} GREP_INFO;
 
 // -----------------------------------------------------------------------------
 // Editor_New
@@ -2017,7 +2029,35 @@ inline BOOL Editor_GetAttr(HWND hwnd, ATTR_INFO* pAI)
 // 戻り値
 //   使用されません
 
-inline BOOL Editor_ShowTip(HWND hwnd, TIP_INFO* pTI)
+inline void Editor_ShowTip(HWND hwnd, TIP_INFO* pTI)
 {
 	SendMessage(hwnd, ME_SHOW_TIP, (WPARAM)0, (LPARAM)pTI);
+}
+
+// -----------------------------------------------------------------------------
+// Editor_FindInFiles
+//   ファイルから検索します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+//   pGI:  GREP_INFO構造体へのポインタ
+// 戻り値
+//   使用されません
+
+inline void Editor_FindInFiles(HWND hwnd, GREP_INFO* pGI)
+{
+	SendMessage(hwnd, ME_FIND_IN_FILES, (WPARAM)0, (LPARAM)pGI);
+}
+
+// -----------------------------------------------------------------------------
+// Editor_ReplaceInFiles
+//   ファイルから置換します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+//   pGI:  GREP_INFO構造体へのポインタ
+// 戻り値
+//   使用されません
+
+inline void Editor_ReplaceInFiles(HWND hwnd, GREP_INFO* pGI)
+{
+	SendMessage(hwnd, ME_REPLACE_IN_FILES, (WPARAM)0, (LPARAM)pGI);
 }

@@ -247,6 +247,9 @@ const
   ME_GET_ATTR = ME_FIRST + 62;
   // 3.7.14
   ME_SHOW_TIP = ME_FIRST + 63;
+  // 3.7.18
+  ME_FIND_IN_FILES = ME_FIRST + 64;
+  ME_REPLACE_IN_FILES = ME_FIRST + 65;
   ME_LAST = ME_FIRST + 255;
 
   MI_GET_FILE_NAME = 256;
@@ -876,6 +879,17 @@ type
 
   PTipInfo = ^TTipInfo;
 
+  TGrepInfo = record
+    cbSize: Cardinal;
+    nCP: Cardinal;
+    nFlags: Cardinal;
+    pszFind: PChar;
+    pszReplace: PChar;
+    pszPath: PChar;
+  end;
+
+  PGrepInfo = ^TGrepInfo;
+
 function Editor_New(hwnd: THandle): THandle; inline;
 function Editor_GetCmdID(hwnd: THandle; hInstance: THandle): Cardinal; inline;
 function Editor_QueryStatus(hwnd: THandle; nCmdID: Cardinal;
@@ -990,6 +1004,8 @@ procedure Editor_DevToView(hwnd: THandle; pptDev, pptView: PPoint); inline;
 procedure Editor_ViewToDev(hwnd: THandle; pptView, pptDev: PPoint); inline;
 function Editor_GetAttr(hwnd: THandle; pAI: PAttrInfo): Boolean; inline;
 procedure Editor_ShowTip(hwnd: THandle; pTI: PTipInfo); inline;
+procedure Editor_FindInFiles(hwnd: THandle; pGI: PGrepInfo); inline;
+procedure Editor_ReplaceInFiles(hwnd: THandle; pGI: PGrepInfo); inline;
 
 implementation
 
@@ -2182,6 +2198,34 @@ end;
 procedure Editor_ShowTip(hwnd: THandle; pTI: PTipInfo);
 begin
   SendMessage(hwnd, ME_SHOW_TIP, WPARAM(0), LPARAM(pTI))
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_FindInFiles
+//   ファイルから検索します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+//   pGI:  TGrepInfo構造体へのポインタ
+// 戻り値
+//   使用されません
+
+procedure Editor_FindInFiles(hwnd: THandle; pGI: PGrepInfo);
+begin
+  SendMessage(hwnd, ME_FIND_IN_FILES, WPARAM(0), LPARAM(pGI))
+end;
+
+// -----------------------------------------------------------------------------
+// Editor_ReplaceInFiles
+//   ファイルから置換します
+// パラメータ
+//   hwnd: ウィンドウのハンドル
+//   pGI:  TGrepInfo構造体へのポインタ
+// 戻り値
+//   使用されません
+
+procedure Editor_ReplaceInFiles(hwnd: THandle; pGI: PGrepInfo);
+begin
+  SendMessage(hwnd, ME_REPLACE_IN_FILES, WPARAM(0), LPARAM(pGI))
 end;
 
 end.
